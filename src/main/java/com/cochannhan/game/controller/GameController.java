@@ -104,4 +104,11 @@ public class GameController {
         String id = request != null && request.getAchievementId() != null ? request.getAchievementId() : "ACH";
         return ResponseEntity.ok(clanQuestService.claimAchievement(characterId, stones, points, id));
     }
+
+    @PostMapping("/unlock-talent/{characterId}/{talentCode}")
+    public ResponseEntity<GameStateDto> unlockTalent(
+            @PathVariable Long characterId,
+            @PathVariable String talentCode) {
+        return ResponseEntity.ok(cultivationService.unlockTalent(characterId, talentCode));
+    }
 }

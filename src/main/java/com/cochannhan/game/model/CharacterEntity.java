@@ -52,6 +52,54 @@ public class CharacterEntity {
     private int daoMarksViem;
     private int daoMarksHuyet;
 
+    @Builder.Default
+    private Integer permanentBonusAtk = 0;
+
+    @Builder.Default
+    private Integer permanentBonusDef = 0;
+
+    @Builder.Default
+    private Integer elementalResistPercent = 0;
+
+    @Builder.Default
+    private Integer talentPoints = 2;
+
+    @Builder.Default
+    @Column(length = 1000)
+    private String unlockedTalents = "";
+
     private int springAutumnCicadaStress;
     private int rebirthCount;
+
+    public int getPermanentBonusAtk() {
+        return permanentBonusAtk != null ? permanentBonusAtk : 0;
+    }
+
+    public int getPermanentBonusDef() {
+        return permanentBonusDef != null ? permanentBonusDef : 0;
+    }
+
+    public int getElementalResistPercent() {
+        return elementalResistPercent != null ? elementalResistPercent : 0;
+    }
+
+    public int getTalentPoints() {
+        return talentPoints != null ? talentPoints : 2;
+    }
+
+    public String getUnlockedTalents() {
+        return unlockedTalents != null ? unlockedTalents : "";
+    }
+
+    public boolean hasTalent(String talentCode) {
+        if (unlockedTalents == null || unlockedTalents.isEmpty() || talentCode == null) {
+            return false;
+        }
+        for (String t : unlockedTalents.split(",")) {
+            if (t.trim().equalsIgnoreCase(talentCode.trim())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

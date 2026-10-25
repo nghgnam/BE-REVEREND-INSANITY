@@ -38,7 +38,8 @@ public class GuService {
         CharacterGu gu = characterGuRepository.findById(characterGuId)
                 .orElseThrow(() -> new IllegalArgumentException("Cổ trùng không tồn tại"));
 
-        int feedingCost = 5; // 5 Nguyên thạch để mua thức ăn đặc thù
+        boolean hasKeoKiet = character.hasTalent("KEO_KIET_CUC_HAN");
+        int feedingCost = hasKeoKiet ? 3 : 5; // Keo Kiệt Cực Hạn giảm >25% chi phí thức ăn
         if (character.getPrimevalStones() < feedingCost) {
             throw new IllegalStateException("Không đủ Nguyên Thạch để mua thức ăn cho " + gu.getGuDefinition().getName());
         }
@@ -48,14 +49,20 @@ public class GuService {
         characterGuRepository.save(gu);
         characterRepository.save(character);
 
-        String msg = String.format("Đã cho %s ăn no (%s)! Độ đói hồi phục 100%%.",
-                gu.getGuDefinition().getName(), gu.getGuDefinition().getFoodType());
+        String talentNote = hasKeoKiet ? " [Thiên Phú Keo Kiệt Cực Hạn: Chỉ tốn 3 Nguyên Thạch!]" : "";
+        String msg = String.format("Đã cho %s ăn no (%s)! Độ đói hồi phục 100%%.%s",
+                gu.getGuDefinition().getName(), gu.getGuDefinition().getFoodType(), talentNote);
 
         return getUpdatedGameState(characterId, msg);
     }
 
     @Transactional
     public GameStateDto toggleEquip(Long characterId, Long characterGuId) {
+        return toggleEquip(characterId, characterGuId, null);
+    }
+
+    @Transactional
+    public GameStateDto toggleEquip(Long characterId, Long characterGuId, Integer targetSlotOverride) {
         CharacterGu gu = characterGuRepository.findById(characterGuId)
                 .orElseThrow(() -> new IllegalArgumentException("Cổ trùng không tồn tại"));
 
@@ -66,7 +73,7 @@ public class GuService {
         List<CharacterGu> allPlayerGus = characterGuRepository.findByCharacterId(characterId);
         List<CharacterGu> equipped = allPlayerGus.stream().filter(CharacterGu::isEquipped).toList();
 
-        if (gu.isEquipped()) {
+        if (gu.isEquipped() && (targetSlotOverride == null || Objects.equals(gu.getSlotIndex(), targetSlotOverride))) {
             gu.setEquipped(false);
             gu.setSlotIndex(null);
             characterGuRepository.save(gu);
@@ -89,7 +96,9 @@ public class GuService {
         // Slot 3: Ô Thân Pháp / Di Chuyển
         // Slot 4: Ô Trinh Sát / Phụ Trợ
         // Slot 5: Ô Cổ Đặc Biệt / Tiêu Hao
-        int targetSlot = determineTargetSlot(gu, equipped);
+        int targetSlot = (targetSlotOverride != null && targetSlotOverride >= 0 && targetSlotOverride <= 5)
+                ? targetSlotOverride
+                : determineTargetSlot(gu, equipped);
 
         // Unequip whatever currently occupies targetSlot
         allPlayerGus.stream()
@@ -255,12 +264,14 @@ public class GuService {
         if (isSamePath) {
             pathBonus = 10;
         } else if (isConflict) {
-            pathBonus = -40;
-            backlashDamage = 80;
+            boolean hasDaNguyenTo = character.hasTalent("DA_NGUYEN_TO");
+            pathBonus = hasDaNguyenTo ? -20 : -40; // Đa Nguyên Tố giảm 50% hình phạt xung khắc
+            backlashDamage = hasDaNguyenTo ? 40 : 80;
         }
 
+        int talentSuccessBonus = character.hasTalent("LUYEN_DAN_SU") ? 15 : 0; // Luyện Đan Sư +15% tỷ lệ thành công
         int luckStatBonus = (character.getDaoMarksLuc() / 15) + (character.getRebirthCount() * 2);
-        successRate = Math.min(95, Math.max(5, recipeQuality + refinementSkillBonus + pathBonus + luckStatBonus));
+        successRate = Math.min(98, Math.max(5, recipeQuality + refinementSkillBonus + pathBonus + luckStatBonus + talentSuccessBonus));
 
         if (character.getPrimevalStones() < stoneCost) {
             throw new IllegalStateException("Không đủ " + stoneCost + " Nguyên Thạch để đốt lò luyện cổ!");
@@ -277,8 +288,9 @@ public class GuService {
                 characterGuRepository.delete(secondaryCharGu);
             }
 
-            // RULE 4: ĐỘT BIẾN LƯỢNG BIẾN (MUTATION CHANCE: 2%)
-            boolean isMutated = random.nextInt(100) < 2;
+            // RULE 4: ĐỘT BIẾN LƯỢNG BIẾN (MUTATION CHANCE: 2%, hoặc 4% nếu có Bàn Tay Vàng)
+            int mutationThreshold = character.hasTalent("BAN_TAY_VANG") ? 4 : 2;
+            boolean isMutated = random.nextInt(100) < mutationThreshold;
             int mutationBonus = isMutated ? 30 : 0;
             String mutationPassive = null;
             if (isMutated) {
@@ -306,8 +318,8 @@ public class GuService {
             characterGuRepository.save(newGu);
 
             if (isMutated) {
-                outcomeMessage = String.format("🌟 THIÊN BIẾN VẠN HÓA! Kích hoạt Đột Biến Cổ Trùng (2%%)! Ra lò [DỊ BIẾN] %s (+%d%% uy lực, Thuộc tính ẩn: %s) phẩm chất vượt cấp!",
-                        resultDef.getName(), mutationBonus, mutationPassive);
+                outcomeMessage = String.format("🌟 THIÊN BIẾN VẠN HÓA! Kích hoạt Đột Biến Cổ Trùng (%d%%)! Ra lò [DỊ BIẾN] %s (+%d%% uy lực, Thuộc tính ẩn: %s) phẩm chất vượt cấp!",
+                        mutationThreshold, resultDef.getName(), mutationBonus, mutationPassive);
             } else {
                 outcomeMessage = String.format("🔥 HỢP LUYỆN ĐẠI THÀNH CÔNG! %s Hào quang rực rỡ, xuất lò %s (%s - Chuyển %d) uy lực bất phàm!",
                         isHiddenRecipeDiscovered ? "✨ Khám phá Bí Phương Ẩn mới!" : "",
@@ -330,27 +342,45 @@ public class GuService {
                 guRecipeRepository.save(newRecipe);
             }
         } else {
-            // RULE 3: HẬU QUẢ THẤT BẠI (FAILURE PENALTY)
+            // RULE 3: HẬU QUẢ THẤT BẠI (FAILURE PENALTY) + TALENT REFUNDS
+            int refundStones = 0;
+            StringBuilder refundNote = new StringBuilder();
+            if (character.hasTalent("NGHICH_CANH_PHA_LO")) {
+                int r = Math.max(1, (int) Math.round(stoneCost * 0.5));
+                refundStones += r;
+                refundNote.append(String.format(" [Nghịch Cảnh Phá Lô: Hoàn trả 50%% = +%d Nguyên Thạch]", r));
+            } else if (character.hasTalent("LUYEN_DAN_SU")) {
+                int r = Math.max(1, (int) Math.round(stoneCost * 0.2));
+                refundStones += r;
+                refundNote.append(String.format(" [Luyện Đan Sư: Giảm 20%% hao hụt = +%d Nguyên Thạch]", r));
+            }
+            if (refundStones > 0) {
+                character.setPrimevalStones(character.getPrimevalStones() + refundStones);
+            }
+
             int failSeverity = random.nextInt(100);
             if (failSeverity < 60) {
                 // 60% Tỉ lệ: Mất toàn bộ SubMaterials. Cổ chủ thể giảm 50% Độ No (Hunger).
-                if (secondaryCharGu != null) {
+                // Nếu có Luyện Đan Sư thì 20% cơ hội giữ lại cả Cổ phụ trợ!
+                boolean savedSub = character.hasTalent("LUYEN_DAN_SU") && random.nextInt(100) < 25;
+                if (secondaryCharGu != null && !savedSub) {
                     characterGuRepository.delete(secondaryCharGu);
                 }
                 primaryCharGu.setCurrentHungerHours(Math.max(1, primaryCharGu.getCurrentHungerHours() / 2));
                 characterGuRepository.save(primaryCharGu);
-                outcomeMessage = String.format("⚠️ LUYỆN CỔ THẤT BẠI (Mất Phụ Liệu)! Toàn bộ nguyên liệu phụ trợ tan biến. Cổ chủ thể %s bảo toàn tính mạng nhưng bị tiêu hao 50%% Độ No!",
-                        primaryDef.getName());
+                outcomeMessage = String.format("⚠️ LUYỆN CỔ THẤT BẠI (Mất Phụ Liệu)! %s Cổ chủ thể %s bảo toàn tính mạng nhưng bị tiêu hao 50%% Độ No!%s",
+                        savedSub ? "Nhờ thiên phú Luyện Đan Sư, bạn giữ lại được Cổ phụ trợ!" : "Toàn bộ nguyên liệu phụ trợ tan biến.",
+                        primaryDef.getName(), refundNote);
             } else if (failSeverity < 90) {
                 // 30% Tỉ lệ: Mất SubMaterials + Tiêu hủy Cổ chủ thể (Mất xác).
                 characterGuRepository.delete(primaryCharGu);
                 if (secondaryCharGu != null) {
                     characterGuRepository.delete(secondaryCharGu);
                 }
-                outcomeMessage = String.format("💀 LUYỆN CỔ THẤT BẠI (Mất Xác)! Lực lượng nghịch chuyển bạo phát, Cổ chủ thể %s cùng toàn bộ nguyên liệu phụ trợ hoàn toàn tiêu hủy!",
-                        primaryDef.getName());
+                outcomeMessage = String.format("💀 LUYỆN CỔ THẤT BẠI (Mất Xác)! Lực lượng nghịch chuyển bạo phát, Cổ chủ thể %s cùng toàn bộ nguyên liệu phụ trợ hoàn toàn tiêu hủy!%s",
+                        primaryDef.getName(), refundNote);
             } else {
-                // 10% Tỉ lệ (NỔ LÒ): Mất tất cả + Trừ 30% HP Nhân vật + Giảm 20% Chân Nguyên tối đa trong 3 ngày
+                // 10% Tỉ lệ (NỔ LÒ): Mất tất cả + Trừ 30% HP Nhân vật + Giảm 20% Chân Nguyên tối đa
                 characterGuRepository.delete(primaryCharGu);
                 if (secondaryCharGu != null) {
                     characterGuRepository.delete(secondaryCharGu);
@@ -358,8 +388,8 @@ public class GuService {
                 int hpLoss = Math.max(20, (int) Math.round(character.getMaxHp() * 0.3));
                 character.setCurrentHp(Math.max(1, character.getCurrentHp() - hpLoss));
                 character.setCurrentEssence((int) (character.getCurrentEssence() * 0.8));
-                outcomeMessage = String.format("💥 ĐẠI HỌA NỔ LÒ (Thương Hại Không Khiếu)! Lò luyện phát nổ kinh hoàng gây phản phệ trừ 30%% Khí Huyết (-%d HP) và vách Không Khiếu chấn thương giảm 20%% Chân Nguyên!",
-                        hpLoss);
+                outcomeMessage = String.format("💥 ĐẠI HỌA NỔ LÒ (Thương Hại Không Khiếu)! Lò luyện phát nổ kinh hoàng gây phản phệ trừ 30%% Khí Huyết (-%d HP) và vách Không Khiếu chấn thương giảm 20%% Chân Nguyên!%s",
+                        hpLoss, refundNote);
             }
         }
 
@@ -434,17 +464,166 @@ public class GuService {
             characterGuRepository.delete(gu);
             msg = "🌸 Sinh cơ mùa xuân cuộn trào! Toàn bộ Khí Huyết và Chân Nguyên được hồi phục đỉnh phong!";
         } else if ("HAC_THI_CO".equals(code) || "BACH_THI_CO".equals(code)) {
-            character.setMaxHp(character.getMaxHp() + 30);
-            character.setCurrentHp(character.getCurrentHp() + 30);
+            character.setMaxHp(character.getMaxHp() + 50);
+            character.setCurrentHp(character.getCurrentHp() + 50);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 15);
+            if ("BACH_THI_CO".equals(code)) {
+                character.setPermanentBonusDef(character.getPermanentBonusDef() + 8);
+            }
             character.setDaoMarksLuc(character.getDaoMarksLuc() + 10);
             characterGuRepository.delete(gu);
-            msg = String.format("🐗 Dùng %s cọ rửa gân cốt! Vĩnh viễn tăng 30 Khí Huyết và 10 Đạo Ngân Lực Đạo!", def.getName());
+            msg = String.format("🐗 [TIÊU HAO CƯỜNG HÓA THỂ PHÁCH] Nuốt trực tiếp %s! Cổ trùng tiêu biến, vĩnh viễn tăng +50 HP tối đa, +15 Tấn Công cơ bắp và +10 Đạo Ngân Lực Đạo!", def.getName());
+        } else if ("HAC_BACH_THI_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 100);
+            character.setCurrentHp(character.getCurrentHp() + 100);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 25);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 15);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 20);
+            characterGuRepository.delete(gu);
+            msg = "🐗 [SONG TRƯ DỊCH CỐT] Nuốt trực tiếp Hắc Bạch Thỉ Cổ! Cổ trùng tiêu biến sau 1 lần dùng, vĩnh viễn tăng +100 HP tối đa, +25 Tấn Công, +15 Phòng Ngự và +20 Đạo Ngân Lực Đạo!";
+        } else if ("THANH_TRU_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 40);
+            character.setCurrentHp(character.getCurrentHp() + 40);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 12);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 8);
+            characterGuRepository.delete(gu);
+            msg = "🐖 [TIÊU HAO CƯỜNG HÓA] Nuốt Thanh Trư Cổ! Cổ trùng biến mất, vĩnh viễn tăng +40 HP tối đa, +12 ATK và +8 Đạo Ngân Lực Đạo!";
+        } else if ("MANH_HO_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 35);
+            character.setCurrentHp(character.getCurrentHp() + 35);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 25);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 12);
+            characterGuRepository.delete(gu);
+            msg = "🐯 [TIÊU HAO CƯỜNG HÓA] Kích hoạt Mãnh Hổ Cổ! Cổ trùng biến mất, vĩnh viễn tăng +35 HP tối đa, +25 ATK cận chiến và +12 Đạo Ngân Lực Đạo!";
+        } else if ("HO_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 50);
+            character.setCurrentHp(character.getCurrentHp() + 50);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 50);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 18);
+            characterGuRepository.delete(gu);
+            msg = "🐅 [KÍCH HOẠT TẾ BÀO] Thôi động Hổ Lực Cổ! Cổ trùng hóa tro sau 1 lần dùng, vĩnh viễn gia tăng +50 Tấn Công cận chiến, +50 HP tối đa và +18 Đạo Ngân Lực Đạo!";
+        } else if ("HUNG_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 80);
+            character.setCurrentHp(character.getCurrentHp() + 80);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 55);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 25);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 22);
+            characterGuRepository.delete(gu);
+            msg = "🐻 [KÍCH HOẠT TẾ BÀO] Hùng Lực Cổ dung nhập cốt tủy rồi tiêu biến! Vĩnh viễn tăng +55 ATK, +25 DEF, +80 HP tối đa và +22 Đạo Ngân Lực Đạo!";
+        } else if ("TUONG_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 120);
+            character.setCurrentHp(character.getCurrentHp() + 120);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 65);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 35);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 28);
+            characterGuRepository.delete(gu);
+            msg = "🐘 [KÍCH HOẠT TẾ BÀO] Tượng Lực Cổ biến mất sau 1 lần dùng! Vĩnh viễn gia tăng +65 Tấn Công cận chiến, +35 Phòng Ngự, +120 HP tối đa và +28 Đạo Ngân Lực Đạo!";
+        } else if ("NGUU_LUC_CO".equals(code) || "MA_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 90);
+            character.setCurrentHp(character.getCurrentHp() + 90);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 50);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 20);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 20);
+            characterGuRepository.delete(gu);
+            msg = String.format("🐂 [TIÊU HAO CƯỜNG HÓA] %s tan vào huyết mạch rồi biến mất! Vĩnh viễn tăng +50 ATK, +20 DEF, +90 HP tối đa và +20 Đạo Ngân Lực Đạo!", def.getName());
+        } else if ("BACH_NHAN_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 120);
+            character.setCurrentHp(character.getCurrentHp() + 120);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 75);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 30);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 35);
+            characterGuRepository.delete(gu);
+            msg = "💪 [BÁCH NHÂN THối THỂ] Bách Nhân Lực Cổ tiêu biến sau 1 lần dùng! Vĩnh viễn tăng +75 ATK, +30 DEF, +120 HP tối đa và +35 Đạo Ngân Lực Đạo!";
+        } else if ("THIEN_NHAN_LUC_CO".equals(code) || "TU_SAM_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 220);
+            character.setCurrentHp(character.getCurrentHp() + 220);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 130);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 60);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 60);
+            characterGuRepository.delete(gu);
+            msg = String.format("🏋️ [THIÊN QUÂN THỐI THỂ] %s hóa thành thiên quân đạo ngân rồi tiêu biến! Vĩnh viễn tăng +130 ATK, +60 DEF, +220 HP tối đa và +60 Đạo Ngân Lực Đạo!", def.getName());
+        } else if ("VAN_NHAN_LUC_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 450);
+            character.setCurrentHp(character.getCurrentHp() + 450);
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 260);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 120);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 120);
+            characterGuRepository.delete(gu);
+            msg = "👑 [VẠN PHU MẠC ĐỊCH] Vạn Nhân Lực Cổ dung nhập nhục thân rồi biến mất! Vĩnh viễn tăng +260 ATK, +120 DEF, +450 HP tối đa và +120 Đạo Ngân Lực Đạo!";
+        } else if ("THIET_BI_CO".equals(code) || "NGU_LAN_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 60);
+            character.setCurrentHp(character.getCurrentHp() + 60);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 35);
+            characterGuRepository.delete(gu);
+            msg = String.format("🛡️ [LUYỆN BÌ NHẬP THỂ] %s dung nhập vào da thịt rồi tiêu biến! Vĩnh viễn tăng +35 Phòng Ngự và +60 HP tối đa!", def.getName());
+        } else if ("THIET_CAN_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 100);
+            character.setCurrentHp(character.getCurrentHp() + 100);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 65);
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 15);
+            characterGuRepository.delete(gu);
+            msg = "🦴 [LUYỆN CỐT NHẬP THỂ] Thiết Can Cổ hóa thành gân sắt xương đồng rồi biến mất! Vĩnh viễn tăng +65 Phòng Ngự, +100 HP tối đa và +15 Đạo Ngân Lực Đạo!";
+        } else if ("LONG_LAN_CO".equals(code)) {
+            character.setMaxHp(character.getMaxHp() + 150);
+            character.setCurrentHp(character.getCurrentHp() + 150);
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 150);
+            character.setElementalResistPercent(Math.min(80, character.getElementalResistPercent() + 10));
+            character.setDaoMarksLuc(character.getDaoMarksLuc() + 30);
+            characterGuRepository.delete(gu);
+            msg = "🐉 [LONG LÂN HÓA GIÁP] Luyện hóa Long Lân Cổ vào da thịt! Cổ trùng tiêu biến, vĩnh viễn tăng +150 Phòng Ngự (DEF), +150 HP tối đa và kháng +10% sát thương nguyên tố!";
+        } else if ("HUYET_KHI_BAO_PHAT_CO".equals(code)) {
+            int hpSacrifice = Math.max(1, (int) Math.round(character.getCurrentHp() * 0.2));
+            character.setCurrentHp(Math.max(1, character.getCurrentHp() - hpSacrifice));
+            character.setCurrentEssence(character.getMaxEssence());
+            character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 10);
+            characterGuRepository.delete(gu);
+            msg = String.format("🩸 [HUYẾT KHÍ BẠO PHÁT] Đốt cháy 20%% HP hiện tại (-%d HP), lập tức hồi đầy 100%% Chân Nguyên (SP) và kích thích huyết mạch tăng +10 ATK! (Dùng trong Chiến Đấu sẽ tăng +50%% ATK trong 2 lượt)", hpSacrifice);
+        } else if ("TU_TINH_CO".equals(code)) {
+            int restoreSp = (int) Math.round(character.getMaxEssence() * 0.5);
+            character.setCurrentEssence(Math.min(character.getMaxEssence(), character.getCurrentEssence() + restoreSp));
+            character.setMaxEssence(character.getMaxEssence() + 15);
+            characterGuRepository.delete(gu);
+            msg = String.format("🧠 [TỤ TINH CỔ] Cổ trùng hóa tro, nạp đầy thanh Tinh Thần, hồi 50%% Chân Nguyên (+%d SP) và mở rộng biển Chân Nguyên (+15 SP tối đa)!", restoreSp);
+        } else if ("KIM_CUONG_BAT_HOAI_CO".equals(code)) {
+            character.setPermanentBonusDef(character.getPermanentBonusDef() + 20);
+            character.setCurrentHp(character.getMaxHp());
+            characterGuRepository.delete(gu);
+            msg = "💎 [KIM CƯƠNG BẤT HOẠI CỔ] Cổ trùng vỡ nát hóa thành kim quang hộ thể, hồi đầy HP và tăng +20 DEF! (Mẹo: Kích hoạt trong Chiến Đấu sẽ hấp thụ 100% sát thương của đòn đánh tiếp theo!)";
+        } else if ("THAN_HANH_PHU_CO".equals(code)) {
+            character.setCurrentEssence(character.getMaxEssence());
+            characterGuRepository.delete(gu);
+            msg = "⚡ [THẦN HÀNH PHÙ CỔ] Phù văn tan thành gió lốc hồi đầy Chân Nguyên! (Mẹo: Kích hoạt trong Chiến Đấu sẽ né tuyệt đối 1 đòn tấn công và dịch chuyển ra Tầm Xa an toàn!)";
         } else if ("LOI_TUONG_CO".equals(code)) {
             characterGuRepository.delete(gu);
             msg = "⚡ Lôi Tương bộc phát! Phóng thích sóng lôi đình chấn nhiếp toàn trường!";
         } else {
+            int atkGain = def.getBonusAtk();
+            int defGain = def.getBonusDef();
+            int hpGain = def.getBonusHp();
+            int healGain = def.getBaseHeal();
+            if (atkGain > 0) character.setPermanentBonusAtk(character.getPermanentBonusAtk() + atkGain);
+            if (defGain > 0) character.setPermanentBonusDef(character.getPermanentBonusDef() + defGain);
+            if (hpGain > 0) {
+                character.setMaxHp(character.getMaxHp() + hpGain);
+                character.setCurrentHp(character.getCurrentHp() + hpGain);
+            }
+            if (healGain > 0) {
+                character.setCurrentHp(Math.min(character.getMaxHp(), character.getCurrentHp() + healGain));
+                character.setCurrentEssence(character.getMaxEssence());
+            }
+            if ("HONG_MONG_TU_KHI_CO".equals(code)) {
+                character.setElementalResistPercent(Math.min(80, character.getElementalResistPercent() + 10));
+            }
+            if (def.getPathName() != null && def.getPathName().contains("Lực")) {
+                character.setDaoMarksLuc(character.getDaoMarksLuc() + Math.max(15, def.getRank() * 10));
+            }
             characterGuRepository.delete(gu);
-            msg = String.format("✨ Đã tiêu thụ %s! Dược lực tinh hoa ngấm sâu vào Không Khiếu.", def.getName());
+            if (atkGain > 0 || defGain > 0 || hpGain > 0) {
+                msg = String.format("✨ [TIÊU HAO CƯỜNG HÓA] Luyện hóa %s (Dùng 1 lần biến mất)! Vĩnh viễn tăng +%d ATK, +%d DEF và +%d HP tối đa!",
+                        def.getName(), atkGain, defGain, hpGain);
+            } else {
+                msg = String.format("✨ Đã tiêu thụ %s! Cổ trùng biến mất sau 1 lần dùng, dược lực tinh hoa ngấm sâu vào Không Khiếu.", def.getName());
+            }
         }
 
         characterRepository.save(character);

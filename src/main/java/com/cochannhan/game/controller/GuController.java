@@ -28,8 +28,9 @@ public class GuController {
     @PostMapping("/equip/{characterId}/{characterGuId}")
     public ResponseEntity<GameStateDto> toggleEquip(
             @PathVariable Long characterId,
-            @PathVariable Long characterGuId) {
-        return ResponseEntity.ok(guService.toggleEquip(characterId, characterGuId));
+            @PathVariable Long characterGuId,
+            @RequestParam(required = false) Integer slotIndex) {
+        return ResponseEntity.ok(guService.toggleEquip(characterId, characterGuId, slotIndex));
     }
 
     @PostMapping("/use/{characterId}/{characterGuId}")

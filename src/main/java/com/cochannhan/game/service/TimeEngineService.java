@@ -46,7 +46,8 @@ public class TimeEngineService {
             }
         }
 
-        // Hunger decay for all Gus (6 hours per period)
+        // Hunger decay for all Gus (6 hours per period, or 4 hours if Keo Kiệt Cực Hạn talent is unlocked)
+        int decayHours = character.hasTalent("KEO_KIET_CUC_HAN") ? 4 : 6;
         List<CharacterGu> gus = characterGuRepository.findByCharacterId(characterId);
         StringBuilder hungerReport = new StringBuilder();
         int starvingCount = 0;
@@ -54,7 +55,7 @@ public class TimeEngineService {
         for (CharacterGu gu : gus) {
             // Spring Autumn Cicada doesn't starve
             if (!"XUAN_THU_THIEN".equals(gu.getGuDefinition().getCode())) {
-                gu.decayHunger(6);
+                gu.decayHunger(decayHours);
                 if (gu.isStarving()) {
                     starvingCount++;
                     hungerReport.append(String.format("[%s đang đói cồn cào! Giảm 50%% uy lực!] ", gu.getGuDefinition().getName()));

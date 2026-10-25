@@ -23,24 +23,93 @@ public class MarketService {
     private final GameStateRepository gameStateRepository;
     private final Random random = new Random();
 
-    // Map of Clan Vault Gu Code -> Contribution points required
+    // Map of Clan Vault Gu Code -> Contribution points required (Nội Khố Tàng Cổ Các Đa Dạng Từ 1 -> 6 Chuyển)
     private static final Map<String, Integer> CLAN_VAULT_PRICES = Map.ofEntries(
+            // Chuyển 1
             Map.entry("NGUYET_QUANG_CO", 30),
             Map.entry("BACH_THI_CO", 35),
             Map.entry("SINH_CO_DIEP", 30),
             Map.entry("THANH_PHONG_LUAN_CO", 40),
             Map.entry("BACH_NGOC_CO", 45),
-            Map.entry("TU_TRUNG", 90),
-            Map.entry("NGUYET_MANG_CO", 120),
-            Map.entry("THIEN_BONG_CO", 140),
+            Map.entry("THANH_DONG_XA_LOI_CO", 65),
+            Map.entry("TU_TRUNG", 80),
+            Map.entry("THANH_LIEN_KIEM_KHI_CO", 45),
+            Map.entry("NHAP_MONG_HO_DIEP_CO", 45),
+            Map.entry("TINH_QUANG_TIEN_CO", 45),
+            // Chuyển 2
+            Map.entry("HAC_BACH_THI_CO", 80),
+            Map.entry("HO_LUC_CO", 90),
+            Map.entry("NGUYET_MANG_CO", 110),
+            Map.entry("THIEN_BONG_CO", 125),
+            Map.entry("XICH_THIET_XA_LOI_CO", 140),
+            Map.entry("NGUYET_ANH_BO_CO", 105),
+            Map.entry("THAT_TINH_HO_MENH_CO", 110),
+            Map.entry("KINH_HOA_THUY_NGUYET_CO", 115),
+            Map.entry("HUYET_ANH_MA_DAO_CO", 115),
+            Map.entry("CAM_LY_HONG_VAN_CO", 120),
+            // Chuyển 3
+            Map.entry("TU_VI_TUU_TRUNG", 165),
+            Map.entry("TUY_TIEN_NGUYET_CO", 170),
+            Map.entry("TU_TINH_CO", 175),
             Map.entry("BACH_NHAN_LUC_CO", 180),
-            Map.entry("KIM_CHUNG_TRAO_CO", 220),
-            Map.entry("XA_LOI_CO", 250)
+            Map.entry("TUONG_LUC_CO", 190),
+            Map.entry("KIM_CUONG_BAT_HOAI_CO", 195),
+            Map.entry("KIM_CHUNG_TRAO_CO", 210),
+            Map.entry("BACH_NGAN_XA_LOI_CO", 230),
+            Map.entry("THO_CO", 260),
+            Map.entry("LOI_MINH_KIEM_DUC_CO", 185),
+            Map.entry("THIEN_MA_HUYEN_CANH_CO", 190),
+            Map.entry("HUYET_NGUYET_CUONG_HOA_CO", 190),
+            Map.entry("TU_KHI_DONG_LAI_CO", 195),
+            Map.entry("CUU_VY_THIEN_HO_BIEN_CO", 190),
+            // Chuyển 4 (Cao Giai Trưởng Lão Bảo Khố)
+            Map.entry("THAT_HUONG_TUU_TRUNG", 320),
+            Map.entry("THIEN_NHAN_LUC_CO", 340),
+            Map.entry("LONG_LAN_CO", 360),
+            Map.entry("HOANG_KIM_XA_LOI_CO", 390),
+            Map.entry("TINH_HA_KIEM_TRAN_CO", 350),
+            Map.entry("VINH_DA_AC_MONG_CO", 350),
+            Map.entry("BAC_DAU_TINH_TRAN_CO", 355),
+            Map.entry("NGUYET_THUC_THON_PHE_CO", 360),
+            Map.entry("PHUONG_HOANG_CHAN_HOA_CO", 365),
+            Map.entry("KIM_SI_DAI_BANG_BIEN_CO", 360),
+            Map.entry("HUYEN_VU_BAT_DIET_BIEN_CO", 370),
+            Map.entry("THIEN_MENH_CHI_TU_CO", 380),
+            Map.entry("DAO_THIEN_THAN_THU_CO", 375),
+            Map.entry("THOI_GIAN_NGUNG_DONG_CO", 385),
+            Map.entry("LONG_HUYET_DOAN_THE_CO", 400),
+            // Chuyển 5 (Chí Bảo Trấn Tộc Đỉnh Cấp)
+            Map.entry("CUU_CHUYEN_TIEN_TUU_TRUNG", 580),
+            Map.entry("VAN_NHAN_LUC_CO", 600),
+            Map.entry("BAT_SON_CO", 620),
+            Map.entry("TU_TINH_XA_LOI_CO", 680),
+            Map.entry("VAN_KIEM_QUY_TONG_CO", 640),
+            Map.entry("TRAM_THIEN_BAT_KIEM_CO", 650),
+            Map.entry("DAI_MONG_THIEN_THU_CO", 640),
+            Map.entry("TU_VI_DE_TINH_CO", 650),
+            Map.entry("THAI_AM_THAN_NGUYET_CO", 650),
+            Map.entry("TU_LA_CHIEN_THE_CO", 660),
+            Map.entry("TU_TIEU_THAN_LOI_CO", 660),
+            Map.entry("THANH_LONG_THIEN_UY_BIEN_CO", 670),
+            Map.entry("NGHICH_THIEN_CAI_MENH_CO", 700),
+            Map.entry("VAN_PHAP_BAT_XAM_CO", 680),
+            Map.entry("THOI_KHONG_DAO_LUU_CO", 690),
+            Map.entry("PHUONG_HOANG_NIET_BAN_CO", 720),
+            Map.entry("CUU_CHUYEN_KIM_DAN_CO", 750),
+            // Chuyển 6 (Tiên Cổ Mật Khố)
+            Map.entry("BACH_QUA_TIEN_TUU_CO", 1500),
+            Map.entry("DOC_CO_KIEM_TIEN_CO", 1600),
+            Map.entry("MONG_DIEP_TIEN_CO", 1600),
+            Map.entry("BAN_CO_KHAI_THIEN_CO", 1700),
+            Map.entry("THIEN_DIA_PHAP_TAC_CO", 1750),
+            Map.entry("HONG_MONG_TU_KHI_CO", 1800)
     );
 
-    // Map of Merchant Shop Gu Code -> Primeval stones price
+    // Map of Merchant Shop Gu Code -> Primeval stones price (Thương Đội Đa Dạng Từ 1 -> 5 Chuyển)
     private static final Map<String, Integer> SHOP_PRICES = Map.ofEntries(
+            // Chuyển 1
             Map.entry("HAC_THI_CO", 30),
+            Map.entry("BACH_THI_CO", 32),
             Map.entry("MANH_HO_CO", 35),
             Map.entry("THANH_TRU_CO", 30),
             Map.entry("BIEN_THACH_CO", 28),
@@ -51,6 +120,16 @@ public class MarketService {
             Map.entry("TROI_BUOC_CO", 28),
             Map.entry("BACH_COT_CO", 30),
             Map.entry("DIA_THINH_NHUC_NHI_THAO", 35),
+            Map.entry("THANH_LIEN_KIEM_KHI_CO", 38),
+            Map.entry("NHAP_MONG_HO_DIEP_CO", 36),
+            Map.entry("TINH_QUANG_TIEN_CO", 36),
+            Map.entry("U_HON_QUY_TRAO_CO", 38),
+            Map.entry("THANH_DONG_XA_LOI_CO", 60),
+            // Chuyển 2
+            Map.entry("HAC_BACH_THI_CO", 75),
+            Map.entry("HO_LUC_CO", 90),
+            Map.entry("HUYET_KHI_BAO_PHAT_CO", 85),
+            Map.entry("THAN_HANH_PHU_CO", 90),
             Map.entry("DANG_KHONG_CO", 85),
             Map.entry("THIET_BI_CO", 80),
             Map.entry("TU_TI_CO", 95),
@@ -64,12 +143,50 @@ public class MarketService {
             Map.entry("THIEN_BONG_CO", 110),
             Map.entry("CUONG_THIET_THUAN_CO", 80),
             Map.entry("SUC_COT_CO", 90),
+            Map.entry("HUYET_ANH_MA_DAO_CO", 95),
+            Map.entry("TUYET_MENH_PHI_DAO_CO", 95),
+            Map.entry("KINH_HOA_THUY_NGUYET_CO", 95),
+            Map.entry("MONG_THUC_LINH_HON_CO", 95),
+            Map.entry("XICH_THIET_XA_LOI_CO", 130),
+            // Chuyển 3
+            Map.entry("TU_VI_TUU_TRUNG", 185),
+            Map.entry("TU_TINH_CO", 190),
+            Map.entry("KIM_CUONG_BAT_HOAI_CO", 210),
             Map.entry("HUNG_LUC_CO", 210),
+            Map.entry("TUONG_LUC_CO", 220),
             Map.entry("BAO_VIEM_CO", 220),
             Map.entry("HAN_BANG_CO", 200),
             Map.entry("LOI_TUONG_CO", 230),
             Map.entry("DAI_PHONG_BAO_CO", 200),
-            Map.entry("TINH_HOA_CO", 210)
+            Map.entry("TINH_HOA_CO", 210),
+            Map.entry("LOI_MINH_KIEM_DUC_CO", 220),
+            Map.entry("PHA_KHONG_DAO_Y_CO", 225),
+            Map.entry("THIEN_MA_HUYEN_CANH_CO", 225),
+            Map.entry("TINH_THAN_DAN_THACH_CO", 230),
+            Map.entry("PHE_HON_MA_LIEN_CO", 230),
+            Map.entry("CU_LINH_THAN_CHUY_CO", 235),
+            Map.entry("BACH_NGAN_XA_LOI_CO", 250),
+            // Chuyển 4
+            Map.entry("THAT_HUONG_TUU_TRUNG", 390),
+            Map.entry("LONG_LAN_CO", 420),
+            Map.entry("TINH_HA_KIEM_TRAN_CO", 430),
+            Map.entry("VINH_DA_AC_MONG_CO", 430),
+            Map.entry("BAC_DAU_TINH_TRAN_CO", 440),
+            Map.entry("BACH_QUY_DA_HANH_CO", 440),
+            Map.entry("PHUONG_HOANG_CHAN_HOA_CO", 450),
+            Map.entry("LONG_HUYET_DOAN_THE_CO", 460),
+            Map.entry("BA_VUONG_DINH_LUC_CO", 450),
+            Map.entry("BO_DE_NGO_DAO_CO", 460),
+            Map.entry("HOANG_KIM_XA_LOI_CO", 480),
+            // Chuyển 5
+            Map.entry("CUU_CHUYEN_TIEN_TUU_TRUNG", 780),
+            Map.entry("VAN_KIEM_QUY_TONG_CO", 820),
+            Map.entry("DAI_MONG_THIEN_THU_CO", 820),
+            Map.entry("TU_VI_DE_TINH_CO", 840),
+            Map.entry("TU_LA_CHIEN_THE_CO", 850),
+            Map.entry("PHUONG_HOANG_NIET_BAN_CO", 880),
+            Map.entry("THAI_CO_THAN_TUY_CO", 900),
+            Map.entry("TU_TINH_XA_LOI_CO", 920)
     );
 
     @Transactional
@@ -208,13 +325,25 @@ public class MarketService {
         }
 
         int sellPrice = calculateSellPrice(gu.getGuDefinition().getRank(), gu.isMutated());
+        double bonusMultiplier = 1.0;
+        StringBuilder talentNote = new StringBuilder();
+        if (character.hasTalent("THUONG_GIA_GIAO_HOP")) {
+            bonusMultiplier += 0.15;
+            talentNote.append(" [Thương Gia Giảo Hoạt +15%]");
+        }
+        GameStateEntity state = gameStateRepository.findByCharacterId(characterId).orElse(null);
+        if (character.hasTalent("DAU_CO_TRUC_LOI") && state != null && state.getMarketEvent() != null && !state.getMarketEvent().isEmpty()) {
+            bonusMultiplier += 0.10;
+            talentNote.append(" [Đầu Cơ Trục Lợi +10%]");
+        }
+        sellPrice = (int) Math.round(sellPrice * bonusMultiplier);
 
         characterGuRepository.delete(gu);
         character.setPrimevalStones(character.getPrimevalStones() + sellPrice);
         characterRepository.save(character);
 
         String title = gu.isMutated() ? "[DỊ BIẾN] " + gu.getGuDefinition().getName() : gu.getGuDefinition().getName();
-        String msg = String.format("💰 Đã bán %s cho Cổ Thị Thương Đoàn, thu về %d Nguyên Thạch!", title, sellPrice);
+        String msg = String.format("💰 Đã bán %s cho Cổ Thị Thương Đoàn, thu về %d Nguyên Thạch!%s", title, sellPrice, talentNote);
 
         return getUpdatedGameState(characterId, msg);
     }
@@ -227,7 +356,19 @@ public class MarketService {
         GuDefinition guDef = guDefinitionRepository.findByCode(guCode)
                 .orElseThrow(() -> new IllegalArgumentException("Cổ trùng không có trong danh mục Cổ Thị: " + guCode));
 
-        int price = SHOP_PRICES.getOrDefault(guCode, getFallbackPrice(guDef.getRank()));
+        int basePrice = SHOP_PRICES.getOrDefault(guCode, getFallbackPrice(guDef.getRank()));
+        double discountMultiplier = 1.0;
+        StringBuilder talentNote = new StringBuilder();
+        if (character.hasTalent("THUONG_GIA_GIAO_HOP")) {
+            discountMultiplier -= 0.15;
+            talentNote.append(" [Thương Gia Giảo Hoạt -15%]");
+        }
+        GameStateEntity state = gameStateRepository.findByCharacterId(characterId).orElse(null);
+        if (character.hasTalent("DAU_CO_TRUC_LOI") && state != null && state.getMarketEvent() != null && !state.getMarketEvent().isEmpty()) {
+            discountMultiplier -= 0.10;
+            talentNote.append(" [Đầu Cơ Trục Lợi -10%]");
+        }
+        int price = Math.max(5, (int) Math.round(basePrice * discountMultiplier));
 
         if (character.getPrimevalStones() < price) {
             throw new IllegalStateException(String.format("Không đủ Nguyên Thạch để mua %s! (Cần: %d viên, bạn có: %d viên)",
@@ -249,8 +390,8 @@ public class MarketService {
                 .build();
         characterGuRepository.save(newGu);
 
-        String msg = String.format("🏮 Giao dịch thành công! Đã mua [%s] (%s - Chuyển %d) từ Thương Đoàn với giá %d Nguyên Thạch.",
-                guDef.getName(), guDef.getPathName() != null ? guDef.getPathName() : (guDef.getType() != null ? guDef.getType().getLabel() : "Cổ Trùng"), guDef.getRank(), price);
+        String msg = String.format("🏮 Giao dịch thành công! Đã mua [%s] (%s - Chuyển %d) từ Thương Đoàn với giá %d Nguyên Thạch.%s",
+                guDef.getName(), guDef.getPathName() != null ? guDef.getPathName() : (guDef.getType() != null ? guDef.getType().getLabel() : "Cổ Trùng"), guDef.getRank(), price, talentNote);
 
         return getUpdatedGameState(characterId, msg);
     }

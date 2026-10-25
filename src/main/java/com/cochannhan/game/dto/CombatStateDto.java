@@ -34,6 +34,10 @@ public class CombatStateDto {
     private boolean isPlayerTurn;
     private boolean isFinished;
     private boolean isPlayerWon;
+    private int playerAtkBuffTurns;
+    private int playerAtkBuffPercent;
+    private int damageImmunityHits;
+    private int evadeHits;
     private String rewardMessage;
     private List<String> combatLogs;
 }

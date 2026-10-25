@@ -116,6 +116,10 @@ public class CombatService {
                 .isPlayerTurn(true)
                 .isFinished(false)
                 .isPlayerWon(false)
+                .playerAtkBuffTurns(0)
+                .playerAtkBuffPercent(0)
+                .damageImmunityHits(0)
+                .evadeHits(0)
                 .combatLogs(new ArrayList<>(List.of(
                         String.format("Chiến đấu khai mở! Chạm trán %s ở cự ly Tầm Xa.", enemyName)
                 )))
@@ -144,7 +148,86 @@ public class CombatService {
                         .orElseThrow(() -> new IllegalArgumentException("Cổ trùng không tìm thấy"));
 
                 GuDefinition def = gu.getGuDefinition();
-                int essenceCost = (int) Math.round(combat.getPlayerMaxEssence() * (def.getPrimevalCostPercent() / 100.0));
+                String code = def.getCode();
+
+                // 1. DÒNG CỔ TIÊU HAO ĐỘT PHÁ CHỈ SỐ NHANH TRONG TRẬN ĐẤU (DÙNG 1 LẦN HÓA TRO)
+                if ("HUYET_KHI_BAO_PHAT_CO".equals(code)) {
+                    int hpSacrifice = Math.max(1, (int) Math.round(combat.getPlayerHp() * 0.2));
+                    combat.setPlayerHp(Math.max(1, combat.getPlayerHp() - hpSacrifice));
+                    combat.setPlayerEssence(combat.getPlayerMaxEssence());
+                    combat.setPlayerAtkBuffTurns(2);
+                    combat.setPlayerAtkBuffPercent(50);
+                    characterGuRepository.delete(gu);
+                    logs.add(String.format("🩸 [HUYẾT KHÍ BẠO PHÁT CỔ] Đốt cháy 20%% HP hiện tại (-%d HP), lập tức hồi đầy 100%% Chân Nguyên (SP) và tăng +50%% ATK trong 2 lượt tiếp theo! Cổ trùng hóa tro!", hpSacrifice));
+                    break;
+                } else if ("KIM_CUONG_BAT_HOAI_CO".equals(code)) {
+                    combat.setDamageImmunityHits(combat.getDamageImmunityHits() + 1);
+                    characterGuRepository.delete(gu);
+                    logs.add("💎 [KIM CƯƠNG BẤT HOẠI CỔ] Cổ trùng vỡ nát hóa thành kim quang bất hoại, hấp thụ 100% sát thương của đòn tấn công tiếp theo!");
+                    break;
+                } else if ("THAN_HANH_PHU_CO".equals(code)) {
+                    combat.setEvadeHits(combat.getEvadeHits() + 1);
+                    combat.setDistance(CombatDistance.TAM_XA);
+                    characterGuRepository.delete(gu);
+                    logs.add("⚡ [THẦN HÀNH PHÙ CỔ] Phù cổ bốc cháy! Bạn né tránh tuyệt đối 1 đòn tấn công và lập tức dịch chuyển ra cự ly Tầm Xa an toàn!");
+                    break;
+                } else if ("TU_TINH_CO".equals(code)) {
+                    combat.setPlayerAp(combat.getPlayerMaxAp() + 2);
+                    int spRestore = (int) Math.round(combat.getPlayerMaxEssence() * 0.5);
+                    combat.setPlayerEssence(Math.min(combat.getPlayerMaxEssence(), combat.getPlayerEssence() + spRestore));
+                    characterGuRepository.delete(gu);
+                    logs.add(String.format("🧠 [TỤ TINH CỔ] Cổ trùng hóa tro! Nạp đầy thanh Tâm Thần (%d AP) và hồi +%d Chân Nguyên, sẵn sàng tung Sát Chiêu liên hoàn trong lượt!", combat.getPlayerAp(), spRestore));
+                    break;
+                } else if ("SINH_CO_DIEP".equals(code)) {
+                    combat.setPlayerHp(combat.getPlayerMaxHp());
+                    characterGuRepository.delete(gu);
+                    logs.add("🍃 [SINH CƠ DIỆP] Lá cổ tan vào ngực, lập tức hồi đầy 100% Khí Huyết (HP)!");
+                    break;
+                } else if ("HOI_XUAN_CO".equals(code)) {
+                    combat.setPlayerHp(combat.getPlayerMaxHp());
+                    combat.setPlayerEssence(combat.getPlayerMaxEssence());
+                    characterGuRepository.delete(gu);
+                    logs.add("🌸 [HỒI XUÂN CỔ] Xuân quang bộc phát, hồi đầy 100% Khí Huyết (HP) và Chân Nguyên (SP) rồi biến mất!");
+                    break;
+                }
+
+                // Calculate Path Synergy (Cộng Hưởng Lưu Phái 2 / 4 / 6 Ô)
+                List<CharacterGu> equippedList = characterGuRepository.findByCharacterId(characterId).stream()
+                        .filter(CharacterGu::isEquipped)
+                        .toList();
+                String guPath = def.getPathName() != null ? def.getPathName() : "Cổ Đạo";
+                long samePathCount = equippedList.stream()
+                        .filter(g -> guPath.equals(g.getGuDefinition().getPathName()))
+                        .count();
+                double pathSynergyDmgMult = 1.0;
+                double pathSynergyEssenceMult = 1.0;
+                String pathSynergyTag = "";
+                if (samePathCount >= 6) {
+                    pathSynergyDmgMult = 1.80;
+                    pathSynergyEssenceMult = 0.65;
+                    pathSynergyTag = String.format(" [🔥 Sát Chiêu 6/6 %s +80%% Uy Lực]", guPath);
+                } else if (samePathCount >= 4) {
+                    pathSynergyDmgMult = 1.35;
+                    pathSynergyEssenceMult = 0.80;
+                    pathSynergyTag = String.format(" [⚡ Đại Cộng Hưởng %d/6 %s +35%%]", samePathCount, guPath);
+                } else if (samePathCount >= 2) {
+                    pathSynergyDmgMult = 1.15;
+                    pathSynergyEssenceMult = 0.90;
+                    pathSynergyTag = String.format(" [✨ Cộng Hưởng %d/6 %s +15%%]", samePathCount, guPath);
+                }
+
+                // Calculate Essence cost (with Lực Đạo Chuyên Gia & Path Synergy reduction)
+                boolean isLucDao = def.getPathName() != null && def.getPathName().contains("Lực");
+                boolean isElemental = def.getPathName() != null && (
+                        def.getPathName().contains("Viêm") || def.getPathName().contains("Thủy") ||
+                        def.getPathName().contains("Băng") || def.getPathName().contains("Lôi") ||
+                        def.getPathName().contains("Phong")
+                );
+
+                int essenceCost = (int) Math.round(combat.getPlayerMaxEssence() * (def.getPrimevalCostPercent() / 100.0) * pathSynergyEssenceMult);
+                if (isLucDao && character.hasTalent("LUC_DAO_CHUYEN_GIA")) {
+                    essenceCost = (int) Math.round(essenceCost * 0.7); // Giảm 30% Chân Nguyên tiêu hao Lực Đạo
+                }
 
                 if (combat.getPlayerAp() < def.getApCost()) {
                     logs.add("⚠️ Không đủ Tâm Thần (AP) để xuất chiêu!");
@@ -158,30 +241,78 @@ public class CombatService {
                 combat.setPlayerAp(combat.getPlayerAp() - def.getApCost());
                 combat.setPlayerEssence(combat.getPlayerEssence() - essenceCost);
 
-                // Calculate damage & effects
+                // If a 1-time permanent Lực Đạo / Tiêu Hao Gu is used in combat, apply permanent buff + burst effect & delete
+                if (def.isConsumable() || def.getType() == GuType.TIEU_THU) {
+                    int permAtkGain = Math.max(15, def.getBonusAtk());
+                    int permHpGain = Math.max(40, def.getBonusHp());
+                    int permDefGain = def.getBonusDef();
+                    character.setPermanentBonusAtk(character.getPermanentBonusAtk() + permAtkGain);
+                    character.setPermanentBonusDef(character.getPermanentBonusDef() + permDefGain);
+                    character.setMaxHp(character.getMaxHp() + permHpGain);
+                    if (isLucDao) {
+                        character.setDaoMarksLuc(character.getDaoMarksLuc() + 12);
+                    }
+                    combat.setPlayerMaxHp(combat.getPlayerMaxHp() + permHpGain);
+                    combat.setPlayerHp(Math.min(combat.getPlayerMaxHp(), combat.getPlayerHp() + permHpGain));
+                    int burstDmg = Math.max(35, def.getBaseDamage() + permAtkGain * 2);
+                    combat.setEnemyHp(Math.max(0, combat.getEnemyHp() - burstDmg));
+                    characterGuRepository.delete(gu);
+                    logs.add(String.format("🔥 [CỔ TIÊU HAO BỘC PHÁT] Thôi động [%s] (Dùng 1 lần biến mất)! Vĩnh viễn tăng +%d ATK, +%d HP tối đa và bộc phát quyền kình gây %d sát thương lên %s!",
+                            def.getName(), permAtkGain, permHpGain, burstDmg, combat.getEnemyName()));
+                    break;
+                }
+
+                // Calculate damage & effects for Equipped Gu
                 double distanceMultiplier = (combat.getDistance() == def.getOptimalDistance()) ? 1.3 : 0.8;
                 double hungerMultiplier = gu.isStarving() ? 0.5 : 1.0;
 
                 if (def.getType() == GuType.CONG_KICH) {
-                    int bonusAtk = characterGuRepository.findByCharacterId(characterId).stream()
+                    int equippedBonusAtk = characterGuRepository.findByCharacterId(characterId).stream()
                             .filter(CharacterGu::isEquipped)
                             .mapToInt(g -> g.getGuDefinition().getBonusAtk())
                             .sum();
-                    int dmg = (int) Math.round(def.getBaseDamage() * distanceMultiplier * hungerMultiplier) + bonusAtk;
+                    int totalBonusAtk = equippedBonusAtk + character.getPermanentBonusAtk() + (character.getDaoMarksLuc() / 2);
+                    double rawDmg = (def.getBaseDamage() * distanceMultiplier * hungerMultiplier) + totalBonusAtk;
+
                     if (gu.isMutated()) {
-                        dmg = (int) Math.round(dmg * (1.0 + (gu.getMutationBonus() / 100.0)));
+                        rawDmg *= (1.0 + (gu.getMutationBonus() / 100.0));
                     }
+                    StringBuilder talentTags = new StringBuilder();
+                    if (combat.getDistance() == CombatDistance.CAN_CHIEN && character.hasTalent("LUC_DAO_CHUYEN_GIA")) {
+                        rawDmg *= 1.25; // +25% sát thương cận chiến
+                        talentTags.append(" [Lực Đạo Chuyên Gia +25% Cận Chiến]");
+                    }
+                    if (isElemental && character.hasTalent("NGUYEN_TO_LINH_THE")) {
+                        rawDmg *= 1.30; // +30% sát thương Nguyên Tố
+                        talentTags.append(" [Linh Thể Nguyên Tố +30%]");
+                    }
+                    if (combat.getPlayerAtkBuffTurns() > 0 && combat.getPlayerAtkBuffPercent() > 0) {
+                        rawDmg *= (1.0 + (combat.getPlayerAtkBuffPercent() / 100.0));
+                        talentTags.append(String.format(" [Huyết Khí Bạo Phát +%d%% ATK]", combat.getPlayerAtkBuffPercent()));
+                    }
+                    if (pathSynergyDmgMult > 1.0) {
+                        rawDmg *= pathSynergyDmgMult;
+                        talentTags.append(pathSynergyTag);
+                    }
+
+                    int dmg = (int) Math.round(rawDmg);
                     combat.setEnemyHp(Math.max(0, combat.getEnemyHp() - dmg));
-                    String bonusAtkText = bonusAtk > 0 ? String.format(" (+%d uy lực từ Cổ trang bị)", bonusAtk) : "";
-                    logs.add(String.format("🗡️ Bạn thi triển [%s]! Gây %d sát thương lên %s!%s",
-                            def.getName(), dmg, combat.getEnemyName(), bonusAtkText));
+                    String bonusAtkText = totalBonusAtk > 0 ? String.format(" (+%d uy lực thể phách & trang bị)", totalBonusAtk) : "";
+                    logs.add(String.format("🗡️ Bạn thi triển [%s]! Gây %d sát thương lên %s!%s%s",
+                            def.getName(), dmg, combat.getEnemyName(), bonusAtkText, talentTags));
                 } else if (def.getType() == GuType.PHONG_NGU) {
                     int shield = (int) Math.round(def.getBaseDefense() * hungerMultiplier);
+                    if (isElemental && character.hasTalent("NGUYEN_TO_LINH_THE")) {
+                        shield = (int) Math.round(shield * 1.30);
+                    }
                     combat.setPlayerHp(Math.min(combat.getPlayerMaxHp(), combat.getPlayerHp() + shield / 2));
                     logs.add(String.format("🛡️ Kích hoạt [%s]! Phòng ngự bạch quang bao bọc thân thể (+%d phòng ngự)!",
                             def.getName(), shield));
                 } else if (def.getType() == GuType.TRI_LIEU) {
                     int heal = (int) Math.round(def.getBaseHeal() * hungerMultiplier);
+                    if (isElemental && character.hasTalent("NGUYEN_TO_LINH_THE")) {
+                        heal = (int) Math.round(heal * 1.30);
+                    }
                     combat.setPlayerHp(Math.min(combat.getPlayerMaxHp(), combat.getPlayerHp() + heal));
                     logs.add(String.format("🍃 Dùng [%s]! Vết thương liền sẹo, hồi phục %d HP!", def.getName(), heal));
                 } else if (def.getType() == GuType.TRINH_SAT) {
@@ -237,7 +368,14 @@ public class CombatService {
             }
             case "END_COMBAT_TURN" -> {
                 // Enemy Turn Execution
-                executeEnemyTurn(characterId, combat, logs);
+                executeEnemyTurn(characterId, character, combat, logs);
+                // Decrement temporary ATK buff turns
+                if (combat.getPlayerAtkBuffTurns() > 0) {
+                    combat.setPlayerAtkBuffTurns(combat.getPlayerAtkBuffTurns() - 1);
+                    if (combat.getPlayerAtkBuffTurns() == 0) {
+                        combat.setPlayerAtkBuffPercent(0);
+                    }
+                }
                 // Reset player AP and naturally restore essence
                 combat.setTurnNumber(combat.getTurnNumber() + 1);
                 combat.setPlayerAp(combat.getPlayerMaxAp());
@@ -299,8 +437,22 @@ public class CombatService {
         return combat;
     }
 
-    private void executeEnemyTurn(Long characterId, CombatStateDto combat, List<String> logs) {
+    private void executeEnemyTurn(Long characterId, CharacterEntity character, CombatStateDto combat, List<String> logs) {
         if (combat.getEnemyHp() <= 0) return;
+
+        // 1. Check Thần Hành Phù Cổ (Né tránh tuyệt đối 1 đòn)
+        if (combat.getEvadeHits() > 0) {
+            combat.setEvadeHits(combat.getEvadeHits() - 1);
+            logs.add(String.format("⚡ [THẦN HÀNH PHÙ CỔ] Thân ảnh bạn hóa thành tàn ảnh, né tránh tuyệt đối 100%% đòn tấn công của %s!", combat.getEnemyName()));
+            return;
+        }
+
+        // 2. Check Kim Cương Bất Hoại Cổ (Hấp thụ 100% sát thương đòn tiếp theo)
+        if (combat.getDamageImmunityHits() > 0) {
+            combat.setDamageImmunityHits(combat.getDamageImmunityHits() - 1);
+            logs.add(String.format("💎 [KIM CƯƠNG BẤT HOẠI CỔ] Kim quang hộ thể chấn nát chiêu thức của %s! Hấp thụ hoàn toàn 100%% sát thương (0 sát thương nhận vào)!", combat.getEnemyName()));
+            return;
+        }
 
         int baseDmg = 20;
         if (combat.getEnemyName().contains("Đợt 5") || combat.getEnemyName().contains("Bạch Ngân")) {
@@ -313,14 +465,29 @@ public class CombatService {
             baseDmg = 25;
         }
 
-        int bonusDef = characterGuRepository.findByCharacterId(characterId).stream()
+        int equippedDef = characterGuRepository.findByCharacterId(characterId).stream()
                 .filter(CharacterGu::isEquipped)
                 .mapToInt(g -> g.getGuDefinition().getBonusDef())
                 .sum();
+        int totalDef = equippedDef + (character.getPermanentBonusDef() / 3);
 
-        int enemyDmg = Math.max(1, (baseDmg + random.nextInt(20)) - bonusDef);
+        int rawEnemyDmg = Math.max(1, (baseDmg + random.nextInt(20)) - totalDef);
+
+        // Apply Elemental Resistance (Long Lân Cổ +10%, Viêm/Thủy Đạo Linh Thể -50% sát thương nguyên tố)
+        int resistPercent = character.getElementalResistPercent();
+        if (character.hasTalent("NGUYEN_TO_LINH_THE")) {
+            resistPercent += 50;
+        }
+        if (character.hasTalent("DA_NGUYEN_TO")) {
+            resistPercent += 15;
+        }
+        resistPercent = Math.min(75, resistPercent);
+
+        int enemyDmg = Math.max(1, (int) Math.round(rawEnemyDmg * (1.0 - (resistPercent / 100.0))));
         combat.setPlayerHp(Math.max(0, combat.getPlayerHp() - enemyDmg));
-        String defNotice = bonusDef > 0 ? String.format(" (Cổ phòng ngự giảm %d sát thương)", bonusDef) : "";
+        String defNotice = (totalDef > 0 || resistPercent > 0)
+                ? String.format(" (Giáp & Linh Thể giảm %d sát thương, kháng %d%%)", totalDef, resistPercent)
+                : "";
         logs.add(String.format("💥 %s phản công dữ dội! Gây %d sát thương lên bạn!%s",
                 combat.getEnemyName(), enemyDmg, defNotice));
     }

@@ -28,8 +28,17 @@ public class RebirthService {
         GameStateEntity state = gameStateRepository.findByCharacterId(characterId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy trạng thái game"));
 
+        // Verify character possesses Xuân Thu Thiền
+        List<CharacterGu> oldGus = characterGuRepository.findByCharacterId(characterId);
+        boolean hasXuanThuThien = oldGus.stream()
+                .anyMatch(cg -> "XUAN_THU_THIEN".equals(cg.getGuDefinition().getCode()));
+        if (!hasXuanThuThien) {
+            throw new IllegalStateException("Nhân vật không sở hữu Xuân Thu Thiền, không thể kích hoạt tự bạo trùng sinh!");
+        }
+
         // Increase rebirth count
         character.setRebirthCount(character.getRebirthCount() + 1);
+        character.setSpringAutumnCicadaStress(25);
 
         // Reset cultivation back to Rank 1 So Giai
         character.setRank(CultivationRank.NHAT_CHUYEN);
@@ -43,7 +52,6 @@ public class RebirthService {
         character.setPrimevalStones(20); // Small bonus for memory of past life
 
         // Retain Xuân Thu Thiền + Starter Nguyệt Quang Cổ, clear other common gus
-        List<CharacterGu> oldGus = characterGuRepository.findByCharacterId(characterId);
         characterGuRepository.deleteAll(oldGus);
 
         GuDefinition nguyetQuang = guDefinitionRepository.findByCode("NGUYET_QUANG_CO").orElseThrow();

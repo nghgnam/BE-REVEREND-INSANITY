@@ -4,15 +4,18 @@ import com.cochannhan.game.dto.GameStateDto;
 import com.cochannhan.game.model.CharacterEntity;
 import com.cochannhan.game.model.CharacterGu;
 import com.cochannhan.game.model.GameStateEntity;
+import com.cochannhan.game.model.GuDefinition;
 import com.cochannhan.game.repository.CharacterGuRepository;
 import com.cochannhan.game.repository.CharacterRepository;
 import com.cochannhan.game.repository.GameStateRepository;
+import com.cochannhan.game.repository.GuDefinitionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +25,9 @@ public class ClanQuestService {
     private final CharacterRepository characterRepository;
     private final CharacterGuRepository characterGuRepository;
     private final GameStateRepository gameStateRepository;
+    private final GuDefinitionRepository guDefinitionRepository;
     private final TimeEngineService timeEngineService;
+    private final Random random = new Random();
 
     @Transactional
     public GameStateDto executeMission(Long characterId, String missionType) {
@@ -32,229 +37,271 @@ public class ClanQuestService {
         GameStateEntity state = gameStateRepository.findByCharacterId(characterId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy trạng thái game"));
 
+        String type = missionType != null ? missionType.toUpperCase().trim() : "";
+
+        // Validate HP before advancing time
+        if ("SAN_SOI".equals(type) && character.getCurrentHp() < 20) {
+            throw new IllegalStateException("Khí huyết quá suy nhược (dưới 20 HP), không thể đi săn Sói! Hãy tĩnh dưỡng trước.");
+        }
+        if ("HO_TONG".equals(type) && character.getCurrentHp() < 20) {
+            throw new IllegalStateException("Khí huyết quá suy nhược (dưới 20 HP), không thể đi hộ tống! Hãy tĩnh dưỡng trước.");
+        }
+        if ("HOA_CUU_SU".equals(type) && character.getCurrentHp() < 25) {
+            throw new IllegalStateException("Khí huyết không đủ (cần ít nhất 25 HP) để thám hiểm hang động ma đạo!");
+        }
+        if ("GIAN_TE".equals(type) && character.getCurrentHp() < 35) {
+            throw new IllegalStateException("Khí huyết quá yếu (cần ít nhất 35 HP) để truy bắt gian tế nguy hiểm!");
+        }
+        if ("ABSORB_STONE_INSTANT".equals(type) && character.getPrimevalStones() < 1) {
+            throw new IllegalStateException("Trong túi không còn viên Nguyên Thạch nào để hấp thụ!");
+        }
+
+        // Advance 1 period first for time-consuming missions so its save never overwrites mission rewards
+        if (!"ABSORB_STONE_INSTANT".equals(type)) {
+            timeEngineService.advancePeriod(characterId);
+            character = characterRepository.findById(characterId).orElseThrow();
+            state = gameStateRepository.findByCharacterId(characterId).orElseThrow();
+        }
+
+        int oldStones = character.getPrimevalStones();
+        int oldContrib = character.getContributionPoints();
         String resultMsg;
 
-        switch (missionType.toUpperCase()) {
+        switch (type) {
             case "TUAN_SON": {
-                // Tuần tra chân núi Thanh Mao
-                int stoneReward = 6;
-                int contribReward = 15;
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
-
-                // Qua 1 canh giờ
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🎯 Hoàn thành nhiệm vụ Tuần Sơn! Được Trưởng Lão Học Đường thưởng +%d Nguyên Thạch và +%d Điểm Cống Hiến. (Thời gian trôi 1 Canh Giờ)",
-                        stoneReward, contribReward);
+                int stoneReward = 120;
+                int contribReward = 300;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                String bonusGu = (random.nextInt(100) < 35) ? awardGuToCharacter(characterId, "HAC_THI_CO") : null;
+                resultMsg = String.format("🎯 Hoàn thành Tuần Sơn! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜)%s.",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu != null ? ", Thu phục thêm [" + bonusGu + "]" : "");
                 break;
             }
-            case "THU_THAP": {
-                // Thu thập Nguyệt Lan Hoa vách núi
-                int stoneReward = 6;
-                int contribReward = 12;
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+            case "THU_THAP":
+            case "HAI_THUOC": {
+                int stoneReward = 120;
+                int contribReward = 240;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
 
-                // Cho Nguyệt Quang Cổ ăn hồi phục 100% độ no
                 List<CharacterGu> gus = characterGuRepository.findByCharacterId(characterId);
-                boolean fed = false;
                 for (CharacterGu gu : gus) {
-                    if ("NGUYET_QUANG_CO".equals(gu.getGuDefinition().getCode())) {
-                        gu.feed(gu.getGuDefinition().getMaxHungerHours());
-                        characterGuRepository.save(gu);
-                        fed = true;
-                    }
+                    gu.feed(gu.getGuDefinition().getMaxHungerHours());
+                    characterGuRepository.save(gu);
                 }
+                String bonusGu = (random.nextInt(100) < 40) ? awardGuToCharacter(characterId, "SINH_CO_DIEP") : null;
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🌿 Thu hái cánh hoa Nguyệt Lan thành công! Nhận +%d Nguyên Thạch, +%d Cống Hiến%s. (Thời gian trôi 1 Canh Giờ)",
-                        stoneReward, contribReward, fed ? " và Nguyệt Quang Cổ đã được cho ăn no!" : "");
+                resultMsg = String.format("🌿 Thu hái Nguyệt Lan & Dược Thảo thành công! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜), toàn bộ Cổ trùng đã no 100%%%s!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu != null ? " & Nhận [" + bonusGu + "]" : "");
                 break;
             }
             case "SAN_SOI": {
-                // Tiêu diệt Sói Hoang thám thính
-                if (character.getCurrentHp() <= 20) {
-                    throw new IllegalStateException("Khí huyết quá suy nhược (dưới 20 HP), không thể đi săn Sói! Hãy tĩnh dưỡng trước.");
-                }
-                int stoneReward = 20;
-                int contribReward = 35;
+                int stoneReward = 400;
+                int contribReward = 700;
                 character.setCurrentHp(Math.max(1, character.getCurrentHp() - 15));
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                String bonusGu = awardGuToCharacter(characterId, random.nextBoolean() ? "LANG_BIEN_CO" : "THIEM_DIEN_CO");
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🐺 Tiêu diệt bầy Sói Dò Đường! Tiêu hao 15 HP, gia tộc khen thưởng +%d Nguyên Thạch và +%d Điểm Cống Hiến!",
-                        stoneReward, contribReward);
+                resultMsg = String.format("🐺 Tiêu diệt bầy Sói Dò Đường! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜), Chiến lợi phẩm: [%s]!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu);
                 break;
             }
             case "TRAN_LOT": {
-                // Chặn cổng học đường trấn lột đồng môn
-                int stoneReward = 8;
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character = characterRepository.saveAndFlush(character);
-
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("👊 Phương Nguyên dựa vào kinh nghiệm Ma Tôn 500 năm, chặn cổng học đường trấn lột thành công +%d Nguyên Thạch từ đám đệ tử yếu ớt!",
-                        stoneReward);
+                int stoneReward = 160;
+                character.setPrimevalStones(oldStones + stoneReward);
+                resultMsg = String.format("👊 Chặn cổng Học Đường trấn lột thành công! Nguyên Thạch: %d ➔ %d (+%d💎)!",
+                        oldStones, character.getPrimevalStones(), stoneReward);
                 break;
             }
             case "TINH_TOA": {
-                // Tĩnh tọa bế quan hồi phục toàn bộ
                 character.setCurrentEssence(character.getMaxEssence());
-                character.setCurrentHp(Math.min(character.getMaxHp(), character.getCurrentHp() + 50));
-                characterRepository.save(character);
-
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = "🛏️ Tĩnh tọa bế quan 1 Canh Giờ. Không Khiếu hồi phục 100% Chân Nguyên và +50 Khí Huyết (HP)!";
+                character.setCurrentHp(character.getMaxHp());
+                resultMsg = "🛏️ Tĩnh tọa bế quan 1 Canh Giờ. Không Khiếu hồi phục 100% Chân Nguyên và 100% Khí Huyết (HP)!";
                 break;
             }
             case "ABSORB_STONE_INSTANT": {
-                // Đốt 1 Nguyên Thạch ngoài đời hồi tức thì (không qua canh giờ)
-                if (character.getPrimevalStones() < 1) {
-                    throw new IllegalStateException("Trong túi không còn viên Nguyên Thạch nào để hấp thụ!");
-                }
-                character.setPrimevalStones(character.getPrimevalStones() - 1);
+                character.setPrimevalStones(oldStones - 1);
                 character.setCurrentEssence(Math.min(character.getMaxEssence(), character.getCurrentEssence() + 35));
                 character.setCurrentHp(Math.min(character.getMaxHp(), character.getCurrentHp() + 30));
-                characterRepository.save(character);
-
-                resultMsg = "💎 Đã bóp vỡ 1 viên Nguyên Thạch! Hấp thụ Chân Nguyên tinh thuần (+35 Chân Nguyên, +30 HP).";
+                resultMsg = String.format("💎 Đã hấp thụ 1 viên Nguyên Thạch (Còn %d💎)! Hồi phục +35 Chân Nguyên, +30 HP.",
+                        character.getPrimevalStones());
                 break;
             }
             case "HO_TONG": {
-                // Hộ tống đoàn lạc đà của Thương Đội
-                if (character.getCurrentHp() <= 20) {
-                    throw new IllegalStateException("Khí huyết quá suy nhược (dưới 20 HP), không thể đi hộ tống! Hãy tĩnh dưỡng trước.");
-                }
-                int stoneReward = 18;
-                int contribReward = 30;
+                int stoneReward = 360;
+                int contribReward = 600;
                 character.setCurrentHp(Math.max(1, character.getCurrentHp() - 15));
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                String bonusGu = (random.nextInt(100) < 50) ? awardGuToCharacter(characterId, "THIET_BI_CO") : null;
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🐪 Hộ tống lạc đà Thương Đội qua hẻm núi an toàn! Tiêu hao 15 HP, thương nhân tạ ơn +%d Nguyên Thạch và +%d Điểm Cống Hiến!",
-                        stoneReward, contribReward);
+                resultMsg = String.format("🐪 Hộ tống Thương Đội an toàn! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜)%s!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu != null ? ", Thương nhân tặng [" + bonusGu + "]" : "");
                 break;
             }
             case "DAO_KHOANG": {
-                // Khai thác Thạch Anh dưới sông ngầm
-                int stoneReward = 14;
-                int contribReward = 20;
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                // Dòng nước ngầm hồi phục chút chân nguyên
-                character.setCurrentEssence(Math.min(character.getMaxEssence(), character.getCurrentEssence() + 20));
-                character = characterRepository.saveAndFlush(character);
+                int stoneReward = 280;
+                int contribReward = 400;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                character.setCurrentEssence(character.getMaxEssence());
+                String bonusGu = (random.nextInt(100) < 45) ? awardGuToCharacter(characterId, "BACH_NGOC_CO") : null;
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("⛏️ Đập vỡ các khối tinh thể Thạch Anh dưới đáy sông ngầm! Thu được +%d Nguyên Thạch, +%d Cống Hiến và hồi phục 20 Chân Nguyên!",
-                        stoneReward, contribReward);
+                resultMsg = String.format("⛏️ Khai thác Thạch Anh sông ngầm! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜), Hồi đầy Chân Nguyên%s!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu != null ? " & Đào được [" + bonusGu + "]" : "");
                 break;
             }
             case "HOA_CUU_SU": {
-                // Dò tìm bí cảnh Hoa Cửu Sư
-                if (character.getCurrentHp() <= 25) {
-                    throw new IllegalStateException("Khí huyết không đủ (cần trên 25 HP) để thám hiểm hang động ma đạo!");
-                }
-                int stoneReward = 28;
-                int contribReward = 15;
+                int stoneReward = 560;
+                int contribReward = 300;
                 character.setCurrentHp(Math.max(1, character.getCurrentHp() - 20));
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                String bonusGu = awardGuToCharacter(characterId, random.nextBoolean() ? "BACH_THI_CO" : "THANH_DONG_XA_LOI_CO");
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🏺 Vượt qua bẫy đá tìm thấy dấu tích bí mật của Hoa Cửu Sư! Tiêu hao 20 HP, đoạt lấy +%d Nguyên Thạch và +%d Điểm Cống Hiến!",
-                        stoneReward, contribReward);
+                resultMsg = String.format("🏺 Thám hiểm mật động Hoa Cửu Sư! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜), Đoạt được [%s]!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu);
                 break;
             }
             case "TRO_LUYEN": {
-                // Trợ lửa Bách Luyện Các
-                int stoneReward = 15;
-                int contribReward = 28;
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+                int stoneReward = 300;
+                int contribReward = 560;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                String bonusGu = (random.nextInt(100) < 45) ? awardGuToCharacter(characterId, "HOA_CAU_CO") : null;
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🔥 Vận chân khí trợ lửa lò luyện Cổ cho Gia Lão thành công! Nhận bổng lộc +%d Nguyên Thạch và +%d Điểm Cống Hiến!",
-                        stoneReward, contribReward);
+                resultMsg = String.format("🔥 Trợ lửa Bách Luyện Các thành công! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜)%s!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu != null ? " & Nhận [" + bonusGu + "]" : "");
                 break;
             }
             case "GIAN_TE": {
-                // Truy bắt gian tế
-                if (character.getCurrentHp() <= 35) {
-                    throw new IllegalStateException("Khí huyết quá yếu (cần trên 35 HP) để truy bắt gian tế nguy hiểm!");
-                }
-                int stoneReward = 35;
-                int contribReward = 60;
-                character.setCurrentHp(Math.max(1, character.getCurrentHp() - 30));
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+                int stoneReward = 700;
+                int contribReward = 1200;
+                character.setCurrentHp(Math.max(1, character.getCurrentHp() - 25));
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+                String bonusGu = awardGuToCharacter(characterId, random.nextBoolean() ? "XICH_THIET_XA_LOI_CO" : "THIEN_BONG_CO");
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
-
-                resultMsg = String.format("🥷 Bắt sống thám tử Bạch Gia mang theo bản đồ phòng thủ! Tiêu hao 30 HP, Tộc Trưởng trọng thưởng +%d Nguyên Thạch và +%d Điểm Cống Hiến!",
-                        stoneReward, contribReward);
+                resultMsg = String.format("🥷 Bắt sống gian tế ngoại tộc! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜), Chiến lợi phẩm: [%s]!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        bonusGu);
                 break;
             }
             case "CHI_DIEM": {
-                // Chỉ điểm quyền cước học đường
-                int stoneReward = 10;
-                int contribReward = 22;
-                character.setPrimevalStones(character.getPrimevalStones() + stoneReward);
-                character.setContributionPoints(character.getContributionPoints() + contribReward);
-                character = characterRepository.saveAndFlush(character);
+                int stoneReward = 200;
+                int contribReward = 440;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
 
-                timeEngineService.advancePeriod(characterId);
-                state = gameStateRepository.findByCharacterId(characterId).orElse(state);
-                character = characterRepository.findById(characterId).orElse(character);
+                resultMsg = String.format("🥋 Chỉ điểm quyền cước Học Đường! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜)!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward);
+                break;
+            }
+            case "SAN_TUU_TRUNG": {
+                // SỰ KIỆN KÉO DÀI: Săn Tửu Trùng & Cổ Trùng Tửu Đạo Chuyển Cao (x20 phần thưởng!)
+                int stoneReward = 800 + random.nextInt(401); // 800 - 1200 Nguyên Thạch
+                int contribReward = 500;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
 
-                resultMsg = String.format("🥋 Chỉ điểm quyền cước cho các thiếu niên học đường! Gia Lão khen ngợi, ban thưởng +%d Nguyên Thạch và +%d Cống Hiến!",
-                        stoneReward, contribReward);
+                String[] wineGuPool = {
+                    "TU_TRUNG", "TU_VI_TUU_TRUNG", "THAT_HUONG_TUU_TRUNG",
+                    "CUU_CHUYEN_TIEN_TUU_TRUNG", "TUY_TIEN_NGUYET_CO",
+                    "CUONG_TUU_BA_VUONG_CO", "BACH_QUA_TIEN_TUU_CO",
+                    "XICH_THIET_XA_LOI_CO", "BACH_NGAN_XA_LOI_CO"
+                };
+                String gu1 = awardGuToCharacter(characterId, wineGuPool[random.nextInt(wineGuPool.length)]);
+                String gu2 = awardGuToCharacter(characterId, wineGuPool[random.nextInt(wineGuPool.length)]);
+
+                resultMsg = String.format("🍶 [SỰ KIỆN SĂN TỬU TRÙNG] Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜) & Bắt được 2 Linh Trùng: [%s], [%s]!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        gu1, gu2);
+                break;
+            }
+            case "TRUYEN_THUA_HOA_TUU": {
+                // SỰ KIỆN KÉO DÀI: Thám Hiểm Truyền Thừa Hoa Tửu Hành Giả (x20 phần thưởng: 2,600 - 4,000 Đá!)
+                int stoneReward = 2600 + random.nextInt(1401); // 2,600 - 4,000 Nguyên Thạch!
+                int contribReward = 900;
+                character.setCurrentHp(Math.max(1, character.getCurrentHp() - 15));
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+
+                String[] hoaTuuCorePool = {
+                    "TU_TRUNG", "TU_VI_TUU_TRUNG", "THAT_HUONG_TUU_TRUNG",
+                    "CUU_CHUYEN_TIEN_TUU_TRUNG", "BACH_QUA_TIEN_TUU_CO",
+                    "XICH_THIET_XA_LOI_CO", "BACH_NGAN_XA_LOI_CO",
+                    "HOANG_KIM_XA_LOI_CO", "TU_TINH_XA_LOI_CO", "THO_CO"
+                };
+                String[] hoaTuuTreasurePool = {
+                    "BACH_NHAN_LUC_CO", "THIEN_NHAN_LUC_CO", "VAN_NHAN_LUC_CO",
+                    "TUONG_LUC_CO", "LONG_LAN_CO", "KIM_CUONG_BAT_HOAI_CO",
+                    "TU_TINH_CO", "TINH_HA_KIEM_TRAN_CO", "VAN_KIEM_QUY_TONG_CO",
+                    "DAI_MONG_THIEN_THU_CO", "TU_VI_DE_TINH_CO",
+                    "TU_LA_CHIEN_THE_CO", "PHUONG_HOANG_NIET_BAN_CO",
+                    "LONG_HUYET_DOAN_THE_CO", "THIEN_NGUYEN_BAO_LIEN", "KIM_CHUNG_TRAO_CO"
+                };
+
+                String gu1 = awardGuToCharacter(characterId, hoaTuuCorePool[random.nextInt(hoaTuuCorePool.length)]);
+                String gu2 = awardGuToCharacter(characterId, hoaTuuTreasurePool[random.nextInt(hoaTuuTreasurePool.length)]);
+                String gu3 = awardGuToCharacter(characterId, hoaTuuCorePool[random.nextInt(hoaTuuCorePool.length)]);
+
+                resultMsg = String.format("🍷 [CHIẾN DỊCH TRUYỀN THỪA HOA TỬU HÀNH GIẢ] Đại thu hoạch x20! Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜), Đoạt 3 Cổ Trùng Quý: [%s], [%s], [%s]!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        gu1, gu2, gu3);
+                break;
+            }
+            case "BI_CANH_THIEN_TIEN": {
+                // SỰ KIỆN KÉO DÀI: Thám Hiểm Động Thiên Cổ Tiên (x20 phần thưởng: 2,000 - 3,000 Đá!)
+                int stoneReward = 2000 + random.nextInt(1001);
+                int contribReward = 800;
+                character.setPrimevalStones(oldStones + stoneReward);
+                character.setContributionPoints(oldContrib + contribReward);
+
+                String[] highRankPool = {
+                    "VAN_KIEM_QUY_TONG_CO", "TRAM_THIEN_BAT_KIEM_CO", "DAI_MONG_THIEN_THU_CO",
+                    "TU_VI_DE_TINH_CO", "THAI_AM_THAN_NGUYET_CO", "TU_LA_CHIEN_THE_CO",
+                    "TU_TIEU_THAN_LOI_CO", "THAI_DUONG_KIM_O_CO", "THAI_CO_CU_NHAN_CO",
+                    "THANH_LONG_THIEN_UY_BIEN_CO", "NGHICH_THIEN_CAI_MENH_CO",
+                    "VAN_PHAP_BAT_XAM_CO", "THOI_KHONG_DAO_LUU_CO", "DOC_CO_KIEM_TIEN_CO",
+                    "MONG_DIEP_TIEN_CO", "BAN_CO_KHAI_THIEN_CO", "HONG_MONG_TU_KHI_CO"
+                };
+                String gu1 = awardGuToCharacter(characterId, highRankPool[random.nextInt(highRankPool.length)]);
+                String gu2 = awardGuToCharacter(characterId, highRankPool[random.nextInt(highRankPool.length)]);
+
+                resultMsg = String.format("🌌 [BÍ CẢNH ĐỘNG THIÊN CỔ TIÊN] Nguyên Thạch: %d ➔ %d (+%d💎), Cống Hiến: %d ➔ %d (+%d📜) & Thu phục 2 Tiên Duyên: [%s], [%s]!",
+                        oldStones, character.getPrimevalStones(), stoneReward,
+                        oldContrib, character.getContributionPoints(), contribReward,
+                        gu1, gu2);
                 break;
             }
             default:
                 throw new IllegalArgumentException("Loại nhiệm vụ không hợp lệ: " + missionType);
         }
 
+        character = characterRepository.saveAndFlush(character);
+        characterGuRepository.flush();
         state.setLastEventLog(resultMsg);
-        gameStateRepository.save(state);
+        state = gameStateRepository.saveAndFlush(state);
 
         List<CharacterGu> gus = characterGuRepository.findByCharacterId(characterId);
 
@@ -341,16 +388,63 @@ public class ClanQuestService {
         GameStateEntity state = gameStateRepository.findByCharacterId(characterId)
                 .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy trạng thái game"));
 
+        int oldStones = character.getPrimevalStones();
+        int oldPoints = character.getContributionPoints();
+
         if (rewardStones > 0) {
-            character.setPrimevalStones(character.getPrimevalStones() + rewardStones);
+            character.setPrimevalStones(oldStones + rewardStones);
         }
         if (rewardPoints > 0) {
-            character.setContributionPoints(character.getContributionPoints() + rewardPoints);
+            character.setContributionPoints(oldPoints + rewardPoints);
         }
+
+        String titlePart = achievementId != null ? achievementId : "Phần Thưởng";
+        StringBuilder awardedGus = new StringBuilder();
+        StringBuilder extraBuffs = new StringBuilder();
+
+        if (achievementId != null && achievementId.contains("|")) {
+            String[] segments = achievementId.split("\\|");
+            titlePart = segments[0];
+            for (int i = 1; i < segments.length; i++) {
+                String seg = segments[i];
+                if (seg.startsWith("GU:")) {
+                    String guPart = seg.substring(3);
+                    for (String guCode : guPart.split(",")) {
+                        if (!guCode.isBlank()) {
+                            String guName = awardGuToCharacter(characterId, guCode.trim());
+                            if (awardedGus.length() > 0) awardedGus.append(", ");
+                            awardedGus.append("[").append(guName).append("]");
+                        }
+                    }
+                    characterGuRepository.flush();
+                } else if (seg.startsWith("SUSP:")) {
+                    int susp = Integer.parseInt(seg.substring(5).trim());
+                    state.setClanSuspicion(Math.min(100, state.getClanSuspicion() + susp));
+                    extraBuffs.append(" (⚠️ +").append(susp).append(" Nghi Ngờ)");
+                } else if (seg.startsWith("DAOLUC:")) {
+                    int dao = Integer.parseInt(seg.substring(7).trim());
+                    character.setDaoMarksLuc(character.getDaoMarksLuc() + dao);
+                    character.setPermanentBonusAtk(character.getPermanentBonusAtk() + 35);
+                    extraBuffs.append(" (💪 +").append(dao).append(" Đạo Ngân Lực Đạo & +35 ATK Vĩnh Viễn)");
+                } else if (seg.startsWith("WISDOM:")) {
+                    int wis = Integer.parseInt(seg.substring(7).trim());
+                    character.setElementalResistPercent(character.getElementalResistPercent() + wis);
+                    character.setPermanentBonusDef(character.getPermanentBonusDef() + 25);
+                    extraBuffs.append(" (🧠 +").append(wis).append("% Tốc Độ Suy Tính & Giảm Hao Chân Nguyên)");
+                } else if (seg.startsWith("HPCOST:")) {
+                    int hpCost = Integer.parseInt(seg.substring(7).trim());
+                    character.setCurrentHp(Math.max(1, character.getCurrentHp() - hpCost));
+                }
+            }
+        }
+
         character = characterRepository.saveAndFlush(character);
 
-        String msg = String.format("🏆 Đã nhận thưởng thành tựu [%s]: +%d Nguyên Thạch, +%d Cống Hiến!",
-                achievementId, rewardStones, rewardPoints);
+        String msg = String.format("🏆 Đã nhận thưởng [%s]: Nguyên Thạch %d ➔ %d (+%d💎), Cống Hiến %d ➔ %d (+%d📜)%s%s!",
+                titlePart, oldStones, character.getPrimevalStones(), rewardStones,
+                oldPoints, character.getContributionPoints(), rewardPoints,
+                awardedGus.length() > 0 ? " & Cổ Trùng: " + awardedGus : "",
+                extraBuffs);
         state.setLastEventLog(msg);
         gameStateRepository.saveAndFlush(state);
 
@@ -363,5 +457,23 @@ public class ClanQuestService {
                 .allGus(gus)
                 .announcement(msg)
                 .build();
+    }
+
+    private String awardGuToCharacter(Long characterId, String guCode) {
+        GuDefinition def = guDefinitionRepository.findByCode(guCode)
+                .orElseGet(() -> guDefinitionRepository.findByCode("TU_TRUNG").orElseThrow());
+        boolean isMutated = random.nextInt(100) < 12;
+        CharacterGu newGu = CharacterGu.builder()
+                .characterId(characterId)
+                .guDefinition(def)
+                .currentHungerHours(def.getMaxHungerHours())
+                .isEquipped(false)
+                .isHibernating(false)
+                .isStarving(false)
+                .isMutated(isMutated)
+                .mutationBonus(isMutated ? 30 : 0)
+                .build();
+        characterGuRepository.save(newGu);
+        return (isMutated ? "[DỊ BIẾN] " : "") + def.getName() + " (Chuyển " + def.getRank() + ")";
     }
 }

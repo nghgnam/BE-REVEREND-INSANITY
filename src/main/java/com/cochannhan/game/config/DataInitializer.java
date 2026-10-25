@@ -77,32 +77,32 @@ public class DataInitializer implements CommandLineRunner {
         // 1.1 LỰC ĐẠO (Strength Path)
         // ---------------------------------------------------------
         list.add(GuDefinition.builder()
-                .code("HAC_THI_CO").name("Hắc Thỉ Cổ").rank(1).type(GuType.CONG_KICH)
+                .code("HAC_THI_CO").name("Hắc Thỉ Cổ").rank(1).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(8).apCost(1).baseDamage(42).baseDefense(5).baseHeal(0)
                 .bonusAtk(15).bonusDef(5).bonusHp(0)
                 .foodType("Thịt Lợn Rừng Đen").maxHungerHours(24).icon("🐗").pathName("Lực Đạo").slotCategory("CONG_KICH")
-                .description("Gia tăng một trư chi lực của lợn rừng đen, trang bị tăng +15 Công kích và +5 Phòng ngự.").build());
+                .description("Gia tăng một trư chi lực của lợn rừng đen, trang bị tăng +15 Công kích và +5 Phòng ngự.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("BACH_THI_CO").name("Bạch Thỉ Cổ").rank(1).type(GuType.PHU_TRO)
+                .code("BACH_THI_CO").name("Bạch Thỉ Cổ").rank(1).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(20).baseHeal(0)
                 .bonusAtk(10).bonusDef(20).bonusHp(30)
                 .foodType("Gạo Nếp Trắng").maxHungerHours(48).icon("🐖").pathName("Lực Đạo").slotCategory("PHU_TRO")
-                .description("Vĩnh viễn cải tạo gân cốt Cổ sư, trang bị tăng +10 Công kích, +20 Phòng ngự và +30 Khí Huyết.").build());
+                .description("Vĩnh viễn cải tạo gân cốt Cổ sư, trang bị tăng +10 Công kích, +20 Phòng ngự và +30 Khí Huyết.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("THANH_TRU_CO").name("Thanh Trư Cổ").rank(1).type(GuType.PHONG_NGU)
+                .code("THANH_TRU_CO").name("Thanh Trư Cổ").rank(1).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(10).apCost(1).baseDamage(15).baseDefense(45).baseHeal(0)
                 .bonusDef(30).bonusHp(40)
                 .foodType("Khoai Lang Xanh").maxHungerHours(36).icon("🦬").pathName("Lực Đạo").slotCategory("PHONG_NGU")
-                .description("Lực đạo kết hợp hộ giáp lợn xanh, da dày thịt béo trang bị tăng +30 Phòng ngự và +40 Khí Huyết.").build());
+                .description("Lực đạo kết hợp hộ giáp lợn xanh, da dày thịt béo trang bị tăng +30 Phòng ngự và +40 Khí Huyết.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("MANH_HO_CO").name("Mãnh Hổ Cổ").rank(1).type(GuType.CONG_KICH)
+                .code("MANH_HO_CO").name("Mãnh Hổ Cổ").rank(1).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(12).apCost(1).baseDamage(55).baseDefense(0).baseHeal(0)
                 .bonusAtk(25)
                 .foodType("Thịt Tươi Hổ").maxHungerHours(24).icon("🐯").pathName("Lực Đạo").slotCategory("CONG_KICH")
-                .description("Ngưng tụ một hổ chi lực, mãnh hổ hạ sơn trang bị tăng bộc phát +25 Công kích.").build());
+                .description("Ngưng tụ một hổ chi lực, mãnh hổ hạ sơn trang bị tăng bộc phát +25 Công kích.").consumable(true).build());
 
         // Nhị chuyển Lực Đạo
         list.add(GuDefinition.builder()
@@ -112,11 +112,11 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Bật nhảy vọt lên không trung rồi giáng xuống cú dậm trời giáng đòn sấm sét.").build());
 
         list.add(GuDefinition.builder()
-                .code("THIET_BI_CO").name("Thiết Bì Cổ").rank(2).type(GuType.PHONG_NGU)
+                .code("THIET_BI_CO").name("Thiết Bì Cổ").rank(2).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(18).apCost(1).baseDamage(0).baseDefense(85).baseHeal(0)
                 .bonusDef(35)
                 .foodType("Mạt Sắt Rỉ").maxHungerHours(48).icon("🛡️").pathName("Lực Đạo").slotCategory("PHONG_NGU")
-                .description("Biến da thịt thành lớp da sắt đen đao thương bất nhập, trang bị tăng +35 Phòng ngự.").build());
+                .description("Biến da thịt thành lớp da sắt đen đao thương bất nhập, trang bị tăng +35 Phòng ngự.").consumable(true).build());
 
         list.add(GuDefinition.builder()
                 .code("TU_TI_CO").name("Bốn Tay Cổ (Tứ Tí Cổ)").rank(2).type(GuType.CONG_KICH)
@@ -126,40 +126,40 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Mọc thêm 2 cánh tay lực đạo ảo ảnh, trang bị tăng +30 Công kích nghiền nát địch thủ.").build());
 
         list.add(GuDefinition.builder()
-                .code("HUNG_LUC_CO").name("Hùng Lực Cổ").rank(2).type(GuType.CONG_KICH)
+                .code("HUNG_LUC_CO").name("Hùng Lực Cổ").rank(2).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(22).apCost(1).baseDamage(110).baseDefense(25).baseHeal(0)
                 .bonusAtk(30).bonusDef(20)
                 .foodType("Mật Ong Rừng Già").maxHungerHours(36).icon("🐻").pathName("Lực Đạo").slotCategory("CONG_KICH")
-                .description("Sức mạnh của gấu nâu cuồng bạo, trang bị tăng +30 Công kích và +20 Phòng ngự.").build());
+                .description("Sức mạnh của gấu nâu cuồng bạo, trang bị tăng +30 Công kích và +20 Phòng ngự.").consumable(true).build());
 
         // Tam chuyển Lực Đạo
         list.add(GuDefinition.builder()
-                .code("BACH_NHAN_LUC_CO").name("Bách Nhân Lực Cổ").rank(3).type(GuType.PHU_TRO)
+                .code("BACH_NHAN_LUC_CO").name("Bách Nhân Lực Cổ").rank(3).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(25).apCost(1).baseDamage(90).baseDefense(45).baseHeal(0)
                 .bonusAtk(45)
                 .foodType("Nhân Sâm Núi Tuyết").maxHungerHours(48).icon("👥").pathName("Lực Đạo").slotCategory("PHU_TRO")
-                .description("Cường hóa thể phách đạt tới sức mạnh của 100 tráng niên hợp lại, trang bị tăng +45 Công kích.").build());
+                .description("Cường hóa thể phách đạt tới sức mạnh của 100 tráng niên hợp lại, trang bị tăng +45 Công kích.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("THIET_CAN_CO").name("Thiết Can Cổ").rank(3).type(GuType.PHONG_NGU)
+                .code("THIET_CAN_CO").name("Thiết Can Cổ").rank(3).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(22).apCost(1).baseDamage(30).baseDefense(130).baseHeal(0)
                 .bonusDef(50)
                 .foodType("Quặng Thép Ngàn Năm").maxHungerHours(60).icon("⛓️").pathName("Lực Đạo").slotCategory("PHONG_NGU")
-                .description("Gân cốt cứng như thép tôi luyện, trang bị tăng +50 Phòng ngự giải trừ chấn thương.").build());
+                .description("Gân cốt cứng như thép tôi luyện, trang bị tăng +50 Phòng ngự giải trừ chấn thương.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("NGUU_LUC_CO").name("Ngưu Lực Cổ").rank(3).type(GuType.CONG_KICH)
+                .code("NGUU_LUC_CO").name("Ngưu Lực Cổ").rank(3).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(24).apCost(1).baseDamage(140).baseDefense(30).baseHeal(0)
                 .bonusAtk(40).bonusHp(30)
                 .foodType("Cỏ Linh Chi Núi").maxHungerHours(48).icon("🐂").pathName("Lực Đạo").slotCategory("CONG_KICH")
-                .description("Khí phách trâu mộng húc đổ cổng thành, trang bị tăng +40 Công kích và +30 Khí Huyết.").build());
+                .description("Khí phách trâu mộng húc đổ cổng thành, trang bị tăng +40 Công kích và +30 Khí Huyết.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("MA_LUC_CO").name("Mã Lực Cổ").rank(3).type(GuType.THAN_PHAP)
+                .code("MA_LUC_CO").name("Mã Lực Cổ").rank(3).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(20).apCost(1).baseDamage(85).baseDefense(20).baseHeal(0)
                 .bonusAtk(30)
                 .foodType("Đậu Nành Tinh Chế").maxHungerHours(36).icon("🐎").pathName("Lực Đạo").slotCategory("THAN_PHAP")
-                .description("Sức phi ngàn dặm của tuấn mã, bứt tốc né đòn trang bị tăng +30 Công kích.").build());
+                .description("Sức phi ngàn dặm của tuấn mã, bứt tốc né đòn trang bị tăng +30 Công kích.").consumable(true).build());
 
         list.add(GuDefinition.builder()
                 .code("CHU_TUOC_LUC_CO").name("Chu Tước Lực Cổ").rank(3).type(GuType.CONG_KICH)
@@ -170,11 +170,11 @@ public class DataInitializer implements CommandLineRunner {
 
         // Tứ/Ngũ chuyển Lực Đạo
         list.add(GuDefinition.builder()
-                .code("THIEN_NHAN_LUC_CO").name("Thiên Nhân Lực Cổ").rank(4).type(GuType.CONG_KICH)
+                .code("THIEN_NHAN_LUC_CO").name("Thiên Nhân Lực Cổ").rank(4).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(35).apCost(1).baseDamage(240).baseDefense(70).baseHeal(0)
                 .bonusAtk(70)
                 .foodType("Linh Dược Ngàn Năm").maxHungerHours(72).icon("💪").pathName("Lực Đạo").slotCategory("CONG_KICH")
-                .description("Sở hữu sức mạnh của 1.000 người gộp lại, trang bị tăng +70 Công kích chấn động sơn hà.").build());
+                .description("Sở hữu sức mạnh của 1.000 người gộp lại, trang bị tăng +70 Công kích chấn động sơn hà.").consumable(true).build());
 
         list.add(GuDefinition.builder()
                 .code("LUC_DAO_GIAC_LONG_CO").name("Lực Đạo Giác Long Cổ").rank(4).type(GuType.CONG_KICH)
@@ -184,18 +184,18 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Hóa hình long lực giác long dũng mãnh, trang bị tăng +85 Công kích nghiền nát phòng tuyến.").build());
 
         list.add(GuDefinition.builder()
-                .code("TU_SAM_LUC_CO").name("Tứ Sâm Lực Cổ").rank(4).type(GuType.PHU_TRO)
+                .code("TU_SAM_LUC_CO").name("Tứ Sâm Lực Cổ").rank(4).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(30).apCost(1).baseDamage(180).baseDefense(90).baseHeal(0)
                 .bonusAtk(80).bonusDef(50)
                 .foodType("Tứ Đại Linh Sâm").maxHungerHours(72).icon("🌿").pathName("Lực Đạo").slotCategory("PHU_TRO")
-                .description("Ngưng tụ tinh hoa 4 loại nhân sâm thượng cổ, trang bị tăng +80 Công kích và +50 Phòng ngự.").build());
+                .description("Ngưng tụ tinh hoa 4 loại nhân sâm thượng cổ, trang bị tăng +80 Công kích và +50 Phòng ngự.").consumable(true).build());
 
         list.add(GuDefinition.builder()
-                .code("VAN_NHAN_LUC_CO").name("Vạn Nhân Lực Cổ").rank(5).type(GuType.CONG_KICH)
+                .code("VAN_NHAN_LUC_CO").name("Vạn Nhân Lực Cổ").rank(5).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(45).apCost(1).baseDamage(380).baseDefense(110).baseHeal(0)
                 .bonusAtk(120)
                 .foodType("Huyết Tinh Vạn Người").maxHungerHours(96).icon("💥").pathName("Lực Đạo").slotCategory("CONG_KICH")
-                .description("Đỉnh cao phàm trần! Sức mạnh của 10.000 người, trang bị tăng +120 Công kích san phẳng thành trì.").build());
+                .description("Đỉnh cao phàm trần! Sức mạnh của 10.000 người, trang bị tăng +120 Công kích san phẳng thành trì.").consumable(true).build());
 
         list.add(GuDefinition.builder()
                 .code("BAT_SON_CO").name("Bạt Sơn Cổ").rank(5).type(GuType.CONG_KICH)
@@ -267,11 +267,11 @@ public class DataInitializer implements CommandLineRunner {
                 .description("Mọc đôi cánh đại bàng xòe rộng lướt gió, né đòn tầm xa và chuyển đổi cự ly chớp mắt.").build());
 
         list.add(GuDefinition.builder()
-                .code("NGU_LAN_CO").name("Ngư Lân Cổ").rank(2).type(GuType.PHONG_NGU)
+                .code("NGU_LAN_CO").name("Ngư Lân Cổ").rank(2).type(GuType.TIEU_THU)
                 .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(15).apCost(1).baseDamage(20).baseDefense(75).baseHeal(0)
                 .bonusDef(20)
                 .foodType("Rong Biển").maxHungerHours(36).icon("🐟").pathName("Biến Hóa Đạo").slotCategory("PHONG_NGU")
-                .description("Toàn thân mọc vảy cá trơn nhẵn phản chấn đòn đánh và tăng +20 Phòng ngự.").build());
+                .description("Toàn thân mọc vảy cá trơn nhẵn phản chấn đòn đánh và tăng +20 Phòng ngự.").consumable(true).build());
 
         list.add(GuDefinition.builder()
                 .code("HUNG_BIEN_CO").name("Hùng Biến Cổ").rank(3).type(GuType.CONG_KICH)
@@ -1468,6 +1468,937 @@ public class DataInitializer implements CommandLineRunner {
                 .foodType("Giấm Gạo Lâu Năm").maxHungerHours(36).icon("🩻").pathName("Đặc Biệt").slotCategory("DAC_BIET")
                 .description("Thu nhỏ vóc dáng, đổi hình dạng khung xương để ngụy trang và né tránh sát thương hiểm.").build());
 
+
+        // =========================================================
+        // DÒNG CỔ TIÊU HAO CƯỜNG HÓA THỂ PHÁCH (VĨNH VIỄN - DÙNG 1 LẦN BIẾN MẤT)
+        // =========================================================
+        list.add(GuDefinition.builder()
+                .code("HAC_BACH_THI_CO").name("Hắc Bạch Thỉ Cổ").rank(2).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(25).bonusHp(100)
+                .foodType("Thịt Lợn Rừng").maxHungerHours(999).icon("🐗").pathName("Lực Đạo").slotCategory("DAC_BIET")
+                .description("Dạng Đan Dược Tiêu Hao: Nuốt trực tiếp tiêu biến sau khi dùng, vĩnh viễn tăng +20 Đạo Ngân Lực Đạo, +100 điểm HP tối đa và +25 ATK.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HO_LUC_CO").name("Hổ Lực Cổ").rank(2).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(50)
+                .foodType("Cốt Tủy Hổ Chúa").maxHungerHours(999).icon("🐅").pathName("Lực Đạo").slotCategory("DAC_BIET")
+                .description("Kích Hoạt Tế Bào: Biến mất sau 1 lần dùng, vĩnh viễn gia tăng +50 điểm tấn công vật lý (ATK) cận chiến và +15 Đạo Ngân Lực Đạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TUONG_LUC_CO").name("Tượng Lực Cổ").rank(3).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(65).bonusHp(80)
+                .foodType("Ngà Voi Cổ Đại").maxHungerHours(999).icon("🐘").pathName("Lực Đạo").slotCategory("DAC_BIET")
+                .description("Kích Hoạt Tế Bào: Biến mất sau 1 lần dùng, vĩnh viễn gia tăng +65 ATK cận chiến, +80 HP tối đa và +25 Đạo Ngân Lực Đạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("LONG_LAN_CO").name("Long Lân Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(150).baseHeal(0)
+                .consumable(true).bonusDef(150)
+                .foodType("Vảy Rồng Thượng Cổ").maxHungerHours(999).icon("🐉").pathName("Biến Hóa").slotCategory("DAC_BIET")
+                .description("Luyện Hóa Vào Da Thịt (Cực hiếm): Tiêu biến sau khi dùng, vĩnh viễn tăng +150 điểm phòng ngự (DEF) và kháng +10% sát thương nguyên tố.").build());
+
+        // =========================================================
+        // DÒNG CỔ TIÊU HAO ĐỘT PHÁ CHỈ SỐ NHANH (BUFF TẠM THỜI TRONG TRẬN ĐẤU)
+        // =========================================================
+        list.add(GuDefinition.builder()
+                .code("HUYET_KHI_BAO_PHAT_CO").name("Huyết Khí Bạo Phát Cổ").rank(2).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(0).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(50)
+                .foodType("Máu Tươi Tâm Đầu").maxHungerHours(999).icon("🩸").pathName("Huyết Đạo").slotCategory("DAC_BIET")
+                .description("Buff Khẩn Cấp (Ma Đạo): Dùng 1 lần trong trận đấu, đốt cháy 20% HP hiện tại để lập tức hồi đầy 100% Chân Nguyên (SP) và tăng +50% ATK trong 2 lượt tiếp theo (dùng xong hóa tro).").build());
+
+        list.add(GuDefinition.builder()
+                .code("KIM_CUONG_BAT_HOAI_CO").name("Kim Cương Bất Hoại Cổ").rank(3).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(10).apCost(0).baseDamage(0).baseDefense(999).baseHeal(0)
+                .consumable(true).bonusDef(100)
+                .foodType("Kim Cương Tinh Phấn").maxHungerHours(999).icon("💎").pathName("Phòng Ngự").slotCategory("DAC_BIET")
+                .description("Buff Khẩn Cấp (Phòng Ngự): Kích hoạt khi chuẩn bị ăn đòn trí mạng. Cổ trùng vỡ nát, hấp thụ 100% sát thương của đòn tấn công tiếp theo (Miễn nhiễm sát thương 1 lần).").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAN_HANH_PHU_CO").name("Thần Hành Phù Cổ").rank(2).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(5).apCost(0).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true)
+                .foodType("Chu Sa Phù Lục").maxHungerHours(999).icon("⚡").pathName("Phong Đạo").slotCategory("DAC_BIET")
+                .description("Buff Khẩn Cấp (Di Chuyển): Kích hoạt để né tránh tuyệt đối 1 đòn tấn công và lập tức dịch chuyển ra cự ly an toàn Tầm Xa (Dùng 1 lần rồi biến mất).").build());
+
+        list.add(GuDefinition.builder()
+                .code("TU_TINH_CO").name("Tụ Tinh Cổ").rank(3).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(0).apCost(0).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true)
+                .foodType("Tinh Thần Ngọc Lộ").maxHungerHours(999).icon("🧠").pathName("Trí Đạo").slotCategory("DAC_BIET")
+                .description("Buff Khẩn Cấp (Trí Đạo): Nuốt vào giúp nạp đầy ngay lập tức thanh Tâm Thần (AP +2 vượt ngưỡng) và hồi 50% Chân Nguyên, giúp suy diễn Sát Chiêu liên hoàn trong lượt.").build());
+
+
+        // =========================================================
+        // 105+ CỔ TRÙNG SÁNG TẠO ĐỘC BẢN & TỬU ĐẠO / KIẾM ĐẠO / MỘNG ĐẠO / TINH ĐẠO MỞ RỘNG
+        // =========================================================
+        list.add(GuDefinition.builder()
+                .code("THAT_HUONG_TUU_TRUNG").name("Thất Hương Tửu Trùng").rank(4).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(10).apCost(1).baseDamage(0).baseDefense(40).baseHeal(50)
+                .bonusAtk(15).bonusDef(25).bonusHp(100)
+                .foodType("Thất Hương Mỹ Tửu").maxHungerHours(72).icon("🍶").pathName("Tửu Đạo").slotCategory("PHU_TRO")
+                .description("Cổ trùng Tửu Đạo Tứ Chuyển: Tinh luyện Chân Nguyên Hoàng Kim thần tốc, trang bị giúp tăng mạnh điểm khi cọ rửa vách Không Khiếu (+55 điểm) và +100 HP.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_CHUYEN_TIEN_TUU_TRUNG").name("Cửu Chuyển Tiên Tửu Trùng").rank(5).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(10).apCost(1).baseDamage(0).baseDefense(80).baseHeal(100)
+                .bonusAtk(35).bonusDef(50).bonusHp(220)
+                .foodType("Tiên Nhưỡng Ngàn Năm").maxHungerHours(96).icon("🏺").pathName("Tửu Đạo").slotCategory("PHU_TRO")
+                .description("Chí bảo Tửu Đạo Ngũ Chuyển của Hoa Tửu Hành Giả: Cọ rửa vách Không Khiếu cực nhanh, trang bị tăng +35 ATK, +50 DEF và +220 HP.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BACH_QUA_TIEN_TUU_CO").name("Bách Quả Tiên Tửu Cổ").rank(6).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(5).apCost(1).baseDamage(150).baseDefense(150).baseHeal(200)
+                .bonusAtk(90).bonusDef(90).bonusHp(400)
+                .foodType("Bách Quả Thiên Lộ").maxHungerHours(168).icon("🍷").pathName("Tửu Đạo").slotCategory("DAC_BIET")
+                .description("Tiên Cổ Tửu Đạo sáng tạo: Hương rượu trăm quả làm say lòng vạn vật, hồi phục Chân Nguyên cuồn cuộn và gia trì toàn diện Công Thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TUY_TIEN_NGUYET_CO").name("Túy Tiên Nguyệt Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(1).baseDamage(95).baseDefense(20).baseHeal(30)
+                .bonusAtk(28).bonusDef(12).bonusHp(50)
+                .foodType("Rượu Hoa Quế").maxHungerHours(48).icon("🌙").pathName("Tửu Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Độc Bản: Kết hợp Tửu Trùng và Nguyệt Quang tạo ra đao trăng mang hơi men mê hoặc, đánh trúng khiến tâm thần kẻ địch choáng váng.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUONG_TUU_BA_VUONG_CO").name("Cuồng Tửu Bá Vương Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(140).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(60).bonusDef(25).bonusHp(140)
+                .foodType("Rượu Máu Hổ Vương").maxHungerHours(999).icon("🍺").pathName("Tửu Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Tửu Đạo: Uống cạn bình bá vương tửu hóa tro, vĩnh viễn tăng +60 ATK, +25 DEF và +140 HP tối đa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THON_THIEN_THUC_CO").name("Thôn Thiên Thực Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(2).baseDamage(240).baseDefense(80).baseHeal(90)
+                .bonusAtk(70).bonusDef(40).bonusHp(180)
+                .foodType("Vạn Vật Linh Khí").maxHungerHours(120).icon("👄").pathName("Thực Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Thực Đạo: Mở ra miệng vực sâu nuốt chửng chiêu thức đối phương và chuyển hóa thành Khí Huyết cho bản thân.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGOC_LO_LINH_TUYEN_CO").name("Ngọc Lộ Linh Tuyền Cổ").rank(3).type(GuType.TRI_LIEU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(15).apCost(1).baseDamage(0).baseDefense(30).baseHeal(110)
+                .bonusDef(25).bonusHp(110)
+                .foodType("Sương Mai Đỉnh Núi").maxHungerHours(60).icon("⛲").pathName("Thực Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Thực Đạo: Dòng suối ngọc lộ chảy trong Không Khiếu, trị liệu thương thế và nuôi dưỡng vách khiếu bền bỉ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KIM_DAN_DAI_BO_CO").name("Kim Đan Đại Bổ Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(200)
+                .consumable(true).bonusAtk(45).bonusDef(45).bonusHp(180)
+                .foodType("Nhân Sâm Vạn Năm").maxHungerHours(999).icon("💊").pathName("Thực Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Đan Đạo: Nuốt vào bụng lập tức hóa thành kim dịch, vĩnh viễn tăng +180 HP tối đa, +45 ATK và +45 DEF.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THANH_LIEN_KIEM_KHI_CO").name("Thanh Liên Kiếm Khí Cổ").rank(1).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(10).apCost(1).baseDamage(48).baseDefense(0).baseHeal(0)
+                .bonusAtk(16)
+                .foodType("Lá Sen Xanh").maxHungerHours(36).icon("🗡️").pathName("Kiếm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Kiếm Đạo: Nở ra đóa sen xanh trong lòng bàn tay, phóng kiếm khí sắc bén cắt đứt hộ giáp sơ cấp.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYET_ANH_MA_DAO_CO").name("Huyết Ảnh Ma Đao Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(14).apCost(1).baseDamage(78).baseDefense(0).baseHeal(15)
+                .bonusAtk(26).bonusHp(25)
+                .foodType("Máu Tươi Ác Thú").maxHungerHours(48).icon("🔪").pathName("Đao Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Đao Đạo: Lưỡi đao huyết ảnh chém xé cận chiến, mỗi nhát chém hút sinh khí kẻ địch bổ sung cho chủ nhân.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TUYET_MENH_PHI_DAO_CO").name("Tuyệt Mệnh Phi Đao Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(12).apCost(1).baseDamage(82).baseDefense(0).baseHeal(0)
+                .bonusAtk(28)
+                .foodType("Tinh Thiết Khoáng").maxHungerHours(48).icon("🗡️").pathName("Đao Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Đao Đạo: Tiểu Lý Phi Đao lệ bất hư phát, chuyên nhắm vào tử huyệt đối phương ở cự ly tầm xa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("LOI_MINH_KIEM_DUC_CO").name("Lôi Minh Kiếm Dực Cổ").rank(3).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(16).apCost(1).baseDamage(65).baseDefense(25).baseHeal(0)
+                .bonusAtk(25).bonusDef(18).bonusHp(40)
+                .foodType("Lôi Thiết Vũ").maxHungerHours(60).icon("⚡").pathName("Kiếm Đạo").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Kiếm Đạo: Sau lưng mọc ra đôi cánh ghép từ hàng trăm thanh kiếm sấm sét, vừa phi hành vừa chém rách không gian.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHA_KHONG_DAO_Y_CO").name("Phá Không Đao Ý Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(18).apCost(1).baseDamage(118).baseDefense(15).baseHeal(0)
+                .bonusAtk(38).bonusDef(10).bonusHp(30)
+                .foodType("Đá Mài Đao Cổ").maxHungerHours(60).icon("⚔️").pathName("Đao Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Đao Đạo: Ngưng tụ đao ý bá đạo chém vỡ hư không, bỏ qua một phần phòng ngự của mục tiêu.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TINH_HA_KIEM_TRAN_CO").name("Tinh Hà Kiếm Trận Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(22).apCost(2).baseDamage(175).baseDefense(45).baseHeal(0)
+                .bonusAtk(55).bonusDef(25).bonusHp(80)
+                .foodType("Tinh Thiết Thiên Ngoại").maxHungerHours(72).icon("🌌").pathName("Kiếm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Kiếm Đạo: Triệu hồi 36 thanh kiếm ánh sao bày thành kiếm trận bao vây绞 sát kẻ địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_U_MINH_DAO_CO").name("Cửu U Minh Đao Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(20).apCost(1).baseDamage(182).baseDefense(20).baseHeal(0)
+                .bonusAtk(62).bonusDef(15).bonusHp(60)
+                .foodType("Hàn Thiết Cửu U").maxHungerHours(72).icon("🏴").pathName("Đao Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Đao Đạo: Lưỡi đao đen kịt mang hàn khí âm ty, chém trúng vừa gây sát thương vật lý vừa đông cứng linh hồn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VAN_KIEM_QUY_TONG_CO").name("Vạn Kiếm Quy Tông Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(265).baseDefense(60).baseHeal(0)
+                .bonusAtk(88).bonusDef(35).bonusHp(120)
+                .foodType("Kiếm Hồn Ngàn Năm").maxHungerHours(96).icon("⚔️").pathName("Kiếm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Kiếm Đạo Ngũ Chuyển: Vạn thanh thần kiếm cùng ngân vang trên bầu trời, trút xuống như mưa hủy diệt vạn vật.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TRAM_THIEN_BAT_KIEM_CO").name("Trảm Thiên Bạt Kiếm Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(28).apCost(2).baseDamage(285).baseDefense(30).baseHeal(0)
+                .bonusAtk(98).bonusDef(20).bonusHp(100)
+                .foodType("Thiên Ngoại Huyền Kim").maxHungerHours(96).icon("🗡️").pathName("Kiếm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Kiếm Đạo: Tích tụ kiếm thế trong vỏ, một khi rút kiếm là kinh thiên động địa, một đòn định sinh tử.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BA_DAO_TUYET_LUAN_CO").name("Bá Đao Tuyệt Luân Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(25).apCost(2).baseDamage(275).baseDefense(50).baseHeal(0)
+                .bonusAtk(92).bonusDef(35).bonusHp(150)
+                .foodType("Bá Vương Huyết Thiết").maxHungerHours(96).icon("🪓").pathName("Đao Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Đao Đạo Ngũ Chuyển: Đao khí纵 hoành tám hướng, càng chiến càng hăng, khí thế áp đảo quần hùng.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KIEM_THUAN_HO_THE_CO").name("Kiếm Thuẫn Hộ Thể Cổ").rank(3).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(15).apCost(1).baseDamage(35).baseDefense(105).baseHeal(0)
+                .bonusAtk(20).bonusDef(42).bonusHp(70)
+                .foodType("Vỏ Kiếm Đồng Cổ").maxHungerHours(60).icon("🛡️").pathName("Kiếm Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Kiếm Đạo: Xoay tròn kiếm quang quanh người tạo thành tấm khiên kiếm khí, ai chạm vào đều bị phản thương.").build());
+
+        list.add(GuDefinition.builder()
+                .code("DOC_CO_KIEM_TIEN_CO").name("Độc Cô Kiếm Tiên Cổ").rank(6).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(2).baseDamage(420).baseDefense(120).baseHeal(0)
+                .bonusAtk(160).bonusDef(80).bonusHp(300)
+                .foodType("Tiên Kiếm Bản Nguyên").maxHungerHours(240).icon("👑").pathName("Kiếm Đạo").slotCategory("CONG_KICH")
+                .description("Tiên Cổ Kiếm Đạo Sáng Tạo: Một kiếm phá vạn pháp, uy lực kiếm tiên vô địch ngang dọc thiên hạ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NHAP_MONG_HO_DIEP_CO").name("Nhập Mộng Hồ Điệp Cổ").rank(1).type(GuType.TRINH_SAT)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(8).apCost(1).baseDamage(25).baseDefense(0).baseHeal(0)
+                .bonusAtk(10).bonusDef(10).bonusHp(20)
+                .foodType("Phấn Hoa Dạ Hợp").maxHungerHours(36).icon("🦋").pathName("Mộng Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Mộng Đạo: Cánh bướm tím bay vào giấc mộng kẻ địch để dò xét bí mật và làm rối loạn tâm cảnh.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KINH_HOA_THUY_NGUYET_CO").name("Kính Hoa Thủy Nguyệt Cổ").rank(2).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(14).apCost(1).baseDamage(0).baseDefense(75).baseHeal(20)
+                .bonusDef(32).bonusHp(60)
+                .foodType("Nước Hồ Ánh Trăng").maxHungerHours(48).icon("🪞").pathName("Huyễn Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Huyễn Đạo: Tạo ra ảo ảnh hoa trong gương, trăng dưới nước để đánh lừa đòn tấn công của đối thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("MONG_THUC_LINH_HON_CO").name("Mộng Thực Linh Hồn Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(14).apCost(1).baseDamage(74).baseDefense(0).baseHeal(20)
+                .bonusAtk(24).bonusDef(10).bonusHp(35)
+                .foodType("Sương Mù Giấc Mộng").maxHungerHours(48).icon("🌙").pathName("Mộng Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Mộng Đạo: Gặm nhấm linh hồn mục tiêu thông qua tầng mộng cảnh, khiến địch nhân suy kiệt tinh thần.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THIEN_MA_HUYEN_CANH_CO").name("Thiên Ma Huyễn Cảnh Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(18).apCost(1).baseDamage(112).baseDefense(30).baseHeal(0)
+                .bonusAtk(35).bonusDef(20).bonusHp(50)
+                .foodType("Hương Trầm Mê Hồn").maxHungerHours(60).icon("🌀").pathName("Huyễn Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Huyễn Đạo: Kéo kẻ thù vào thiên ma ảo cảnh, tự tàn sát bản thân trong cơn điên loạn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAT_TINH_LUC_DUC_CO").name("Thất Tình Lục Dục Cổ").rank(3).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(16).apCost(1).baseDamage(85).baseDefense(35).baseHeal(35)
+                .bonusAtk(28).bonusDef(22).bonusHp(65)
+                .foodType("Lệ Tình Nhân").maxHungerHours(60).icon("🎭").pathName("Mộng Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Mộng Đạo: Kích động hỷ nộ ái ố của đối phương, làm tan rã ý chí phòng ngự.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHA_VONG_LINH_NHAN_CO").name("Phá Vọng Linh Nhãn Cổ").rank(3).type(GuType.TRINH_SAT)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(12).apCost(1).baseDamage(45).baseDefense(30).baseHeal(0)
+                .bonusAtk(20).bonusDef(20).bonusHp(50)
+                .foodType("Nước Mắt Chim Ưng").maxHungerHours(60).icon("👁️").pathName("Huyễn Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Huyễn Đạo: Đôi mắt kim quang nhìn xuyên mọi tầng ảo ảnh, ngụy trang và cổ trùng ẩn giấu của kẻ địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VINH_DA_AC_MONG_CO").name("Vĩnh Dạ Ác Mộng Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(22).apCost(2).baseDamage(178).baseDefense(40).baseHeal(0)
+                .bonusAtk(58).bonusDef(25).bonusHp(85)
+                .foodType("Hắc Ám Mộng Tinh").maxHungerHours(72).icon("🌑").pathName("Mộng Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Mộng Đạo Tứ Chuyển: Bao phủ chiến trường bằng bóng tối ác mộng vĩnh hằng, rút cạn sinh lực đối thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYEN_ANH_PHAN_THAN_CO").name("Huyễn Ảnh Phân Thân Cổ").rank(4).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(18).apCost(1).baseDamage(90).baseDefense(90).baseHeal(0)
+                .bonusAtk(35).bonusDef(45).bonusHp(110)
+                .foodType("Lông Cáo Chín Đuôi").maxHungerHours(72).icon("👥").pathName("Huyễn Đạo").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Huyễn Đạo: Phân tách ra 3 đạo huyễn ảnh chân thực đến 90%, vừa cùng tấn công vừa đỡ đòn thay bản thể.").build());
+
+        list.add(GuDefinition.builder()
+                .code("DAI_MONG_THIEN_THU_CO").name("Đại Mộng Thiên Thu Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(26).apCost(2).baseDamage(268).baseDefense(85).baseHeal(60)
+                .bonusAtk(86).bonusDef(48).bonusHp(160)
+                .foodType("Thiên Thu Mộng Lộ").maxHungerHours(96).icon("🌌").pathName("Mộng Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Mộng Đạo Ngũ Chuyển: Một giấc mộng dài ngàn năm, khi tỉnh dậy thì thân xác kẻ địch đã hóa thành cát bụi.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VO_TUONG_HUYEN_THAN_CO").name("Vô Tướng Huyễn Thần Cổ").rank(5).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(22).apCost(2).baseDamage(220).baseDefense(120).baseHeal(50)
+                .bonusAtk(75).bonusDef(65).bonusHp(190)
+                .foodType("Thất Thải Lưu Ly").maxHungerHours(96).icon("🔮").pathName("Huyễn Đạo").slotCategory("DAC_BIET")
+                .description("Sáng tạo Huyễn Đạo Ngũ Chuyển: Thiên biến vạn hóa vô hình vô tướng, phản chiếu lại chiêu thức của kẻ thù.").build());
+
+        list.add(GuDefinition.builder()
+                .code("MONG_DAO_NGO_CHAN_CO").name("Mộng Đạo Ngộ Chân Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(100)
+                .consumable(true).bonusAtk(50).bonusDef(50).bonusHp(150)
+                .foodType("Mộng Cảnh Tinh Hoa").maxHungerHours(999).icon("💭").pathName("Mộng Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Mộng Đạo: Trong mộng ngộ đạo trăm năm rồi tiêu biến, vĩnh viễn tăng +50 ATK, +50 DEF và +150 HP tối đa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("MONG_DIEP_TIEN_CO").name("Mộng Điệp Tiên Cổ").rank(6).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(2).baseDamage(380).baseDefense(180).baseHeal(150)
+                .bonusAtk(140).bonusDef(110).bonusHp(350)
+                .foodType("Tiên Mộng Chi Khí").maxHungerHours(240).icon("🦋").pathName("Mộng Đạo").slotCategory("DAC_BIET")
+                .description("Tiên Cổ Mộng Đạo Sáng Tạo: Trang Chu mộng hồ điệp, đảo lộn thực hư thiên địa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TINH_QUANG_TIEN_CO").name("Tinh Quang Tiễn Cổ").rank(1).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(10).apCost(1).baseDamage(45).baseDefense(0).baseHeal(0)
+                .bonusAtk(15).bonusHp(15)
+                .foodType("Đá Ánh Sao").maxHungerHours(36).icon("🌠").pathName("Tinh Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Tinh Đạo: Bắn ra mũi tên ánh sao lấp lánh xuyên thủng màn đêm.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGUYET_ANH_BO_CO").name("Nguyệt Ảnh Bộ Cổ").rank(2).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(12).apCost(1).baseDamage(20).baseDefense(35).baseHeal(0)
+                .bonusAtk(12).bonusDef(20).bonusHp(45)
+                .foodType("Sương Ánh Trăng").maxHungerHours(48).icon("🌙").pathName("Nguyệt Đạo").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Nguyệt Đạo: Bước đi trên bóng trăng không tiếng động, lướt nhanh giữ khoảng cách thả diều hoàn hảo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAT_TINH_HO_MENH_CO").name("Thất Tinh Hộ Mệnh Cổ").rank(2).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(14).apCost(1).baseDamage(0).baseDefense(78).baseHeal(25)
+                .bonusDef(34).bonusHp(65)
+                .foodType("Bột Đá Bắc Đẩu").maxHungerHours(48).icon("⭐").pathName("Tinh Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Tinh Đạo: Bảy ngôi sao nhỏ xoay quanh cơ thể tạo thành vòng chắn tinh quang kiên cố.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYET_NGUYET_CUONG_HOA_CO").name("Huyết Nguyệt Cuồng Hóa Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(18).apCost(1).baseDamage(122).baseDefense(15).baseHeal(0)
+                .bonusAtk(42).bonusDef(10).bonusHp(50)
+                .foodType("Huyết Nguyệt Hoa").maxHungerHours(60).icon("🩸").pathName("Nguyệt Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Nguyệt Đạo: Trăng máu hiện lên trong Không Khiếu, nhuộm đỏ đao quang với sát thương bạo liệt.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TINH_THAN_DAN_THACH_CO").name("Tinh Thầnẫn Thạch Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(20).apCost(2).baseDamage(128).baseDefense(25).baseHeal(0)
+                .bonusAtk(40).bonusDef(15).bonusHp(45)
+                .foodType("Thiên Thạch Vụn").maxHungerHours(60).icon("☄️").pathName("Tinh Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Tinh Đạo: Triệu hồi thiên thạch ánh sao từ bầu trời giáng thẳng xuống đầu kẻ địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGUYET_HOA_TINH_KHIET_CO").name("Nguyệt Hoa Tinh Khiết Cổ").rank(3).type(GuType.TRI_LIEU)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(1).baseDamage(0).baseDefense(35).baseHeal(105)
+                .bonusAtk(10).bonusDef(25).bonusHp(95)
+                .foodType("Sương Nguyệt Lan").maxHungerHours(60).icon("🌕").pathName("Nguyệt Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Nguyệt Đạo: Ánh trăng dịu nhẹ tắm mát toàn thân, chữa lành mọi vết thương và hồi phục tâm trí.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BAC_DAU_TINH_TRAN_CO").name("Bắc Đẩu Tinh Trận Cổ").rank(4).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(1).baseDamage(60).baseDefense(165).baseHeal(40)
+                .bonusAtk(25).bonusDef(68).bonusHp(140)
+                .foodType("Thất Tinh Ngọc Thạch").maxHungerHours(72).icon("✨").pathName("Tinh Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Tinh Đạo Tứ Chuyển: Chòm sao Bắc Đẩu trấn giữ Không Khiếu, phòng ngự vững như bàn thạch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGUYET_THUC_THON_PHE_CO").name("Nguyệt Thực Thôn Phệ Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(22).apCost(2).baseDamage(185).baseDefense(30).baseHeal(30)
+                .bonusAtk(60).bonusDef(20).bonusHp(80)
+                .foodType("Hắc Nguyệt Tinh").maxHungerHours(72).icon("🌘").pathName("Nguyệt Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Nguyệt Đạo Tứ Chuyển: Bóng tối nguyệt thực nuốt chửng ánh sáng và Chân Nguyên của mục tiêu.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGAN_HA_TINH_SA_CO").name("Ngân Hà Tinh Sa Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(20).apCost(1).baseDamage(168).baseDefense(45).baseHeal(0)
+                .bonusAtk(52).bonusDef(28).bonusHp(75)
+                .foodType("Cát Ngân Hà").maxHungerHours(72).icon("🌌").pathName("Tinh Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Tinh Đạo: Cuốn theo dòng sông cát ánh sao lấp lánh nghiền nát mọi chướng ngại.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TU_VI_DE_TINH_CO").name("Tử Vi Đế Tinh Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(278).baseDefense(90).baseHeal(50)
+                .bonusAtk(90).bonusDef(50).bonusHp(180)
+                .foodType("Đế Tinh Tử Ngọc").maxHungerHours(96).icon("👑").pathName("Tinh Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Tinh Đạo Ngũ Chuyển: Ngôi sao Đế Vương tối cao thống lĩnh vạn tinh, uy áp chấn nhiếp thiên hạ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAI_AM_THAN_NGUYET_CO").name("Thái Âm Thần Nguyệt Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(272).baseDefense(85).baseHeal(65)
+                .bonusAtk(88).bonusDef(45).bonusHp(175)
+                .foodType("Thái Âm Hàn Ngọc").maxHungerHours(96).icon("🌕").pathName("Nguyệt Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Nguyệt Đạo Ngũ Chuyển: Đỉnh cao của Cổ Nguyệt nhất tộc, triệu hồi Thái Âm Thần Nguyệt đóng băng vạn dặm.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TINH_TUY_LUYEN_THE_CO").name("Tinh Tủy Luyện Thể Cổ").rank(3).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(40).bonusDef(40).bonusHp(110)
+                .foodType("Tinh Thần Chi Tủy").maxHungerHours(999).icon("🌟").pathName("Tinh Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Tinh Đạo: Hấp thụ tinh tủy ngôi sao vào xương cốt rồi biến mất, vĩnh viễn tăng +40 ATK, +40 DEF và +110 HP.").build());
+
+        list.add(GuDefinition.builder()
+                .code("U_HON_QUY_TRAO_CO").name("U Hồn Quỷ Trảo Cổ").rank(1).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(10).apCost(1).baseDamage(46).baseDefense(0).baseHeal(0)
+                .bonusAtk(16).bonusHp(15)
+                .foodType("Khói Mộ Cổ").maxHungerHours(36).icon("👻").pathName("Hồn Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Hồn Đạo: Bàn tay quỷ hồn vô hình bóp nghẹt trái tim kẻ địch ở cự ly gần.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYET_SAT_CUONG_DAO_CO").name("Huyết Sát Cuồng Đao Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(14).apCost(1).baseDamage(84).baseDefense(0).baseHeal(15)
+                .bonusAtk(28).bonusHp(30)
+                .foodType("Máu Chiến Trường").maxHungerHours(48).icon("🩸").pathName("Huyết Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Huyết Đạo: Ngưng tụ sát khí và máu tươi thành lưỡi đao cuồng bạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BACH_COT_CHIEN_GIAP_CO").name("Bạch Cốt Chiến Giáp Cổ").rank(2).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(14).apCost(1).baseDamage(20).baseDefense(82).baseHeal(0)
+                .bonusAtk(10).bonusDef(36).bonusHp(65)
+                .foodType("Bột Xương Trắng").maxHungerHours(48).icon("🦴").pathName("Cốt Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Cốt Đạo: Khung xương trắng mọc ra ngoài lớp áo tạo thành bộ chiến giáp gai góc dữ tợn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHE_HON_MA_LIEN_CO").name("Phệ Hồn Ma Liên Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(18).apCost(1).baseDamage(116).baseDefense(25).baseHeal(25)
+                .bonusAtk(38).bonusDef(15).bonusHp(60)
+                .foodType("Hoa Sen Máu").maxHungerHours(60).icon("🪷").pathName("Hồn Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Hồn Đạo: Đóa sen đen nở rộ nuốt chửng tàn hồn đối thủ, chuyển hóa thành sinh mệnh lực.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYET_TE_THO_NGUYEN_CO").name("Huyết Tế Thọ Nguyên Cổ").rank(3).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(150)
+                .consumable(true).bonusAtk(55).bonusDef(25).bonusHp(130)
+                .foodType("Huyết Tinh Ngàn Năm").maxHungerHours(999).icon("🩸").pathName("Huyết Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Ma Đạo: Dùng 1 lần hóa thành huyết khí tẩy tủy, vĩnh viễn tăng +55 ATK, +25 DEF và +130 HP tối đa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BACH_QUY_DA_HANH_CO").name("Bách Quỷ Dạ Hành Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(22).apCost(2).baseDamage(186).baseDefense(40).baseHeal(0)
+                .bonusAtk(62).bonusDef(22).bonusHp(85)
+                .foodType("Trăm Luồng Âm Hồn").maxHungerHours(72).icon("👹").pathName("Hồn Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Hồn Đạo Tứ Chuyển: Mở cổng âm phủ triệu hồi trăm con ác quỷ gào thét xé xác kẻ thù.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BACH_COT_VUONG_TOA_CO").name("Bạch Cốt Vương Tọa Cổ").rank(4).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(1).baseDamage(70).baseDefense(175).baseHeal(0)
+                .bonusAtk(30).bonusDef(72).bonusHp(150)
+                .foodType("Xương Chúa Tể").maxHungerHours(72).icon("🪑").pathName("Cốt Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Cốt Đạo Tứ Chuyển: Ngai vàng kết từ vạn khúc xương trắng nâng đỡ Cổ sư, miễn giảm sát thương cực lớn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_CHUYEN_HUYET_LIEN_CO").name("Cửu Chuyển Huyết Liên Cổ").rank(4).type(GuType.TRI_LIEU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(18).apCost(1).baseDamage(60).baseDefense(50).baseHeal(165)
+                .bonusAtk(25).bonusDef(30).bonusHp(160)
+                .foodType("Máu Tim Linh Thú").maxHungerHours(72).icon("🌺").pathName("Huyết Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Huyết Đạo: Huyết liên xoay chuyển trong đan điền, tái tạo máu thịt với tốc độ kinh người.").build());
+
+        list.add(GuDefinition.builder()
+                .code("MINH_GIOI_TU_KHI_CO").name("Minh Giới Tử Khí Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(2).baseDamage(176).baseDefense(35).baseHeal(0)
+                .bonusAtk(58).bonusDef(20).bonusHp(70)
+                .foodType("Khí Chết Ngàn Năm").maxHungerHours(72).icon("💀").pathName("Ám Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Ám Đạo: Luồng tử khí xám xịt từ Minh Giới làm khô héo sinh cơ của mọi sinh vật chạm phải.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TU_LA_CHIEN_THE_CO").name("Tu La Chiến Thể Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(25).apCost(2).baseDamage(280).baseDefense(95).baseHeal(50)
+                .bonusAtk(96).bonusDef(52).bonusHp(210)
+                .foodType("Tu La Huyết Tinh").maxHungerHours(96).icon("👹").pathName("Huyết Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Ma Đạo Ngũ Chuyển: Hóa thân thành Chiến Thần Tu La ba đầu sáu tay, sát lực ngập trời.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HAC_AM_THON_THIEN_CO").name("Hắc Ám Thôn Thiên Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(26).apCost(2).baseDamage(274).baseDefense(80).baseHeal(0)
+                .bonusAtk(90).bonusDef(45).bonusHp(165)
+                .foodType("Hắc Ám Tinh Hạch").maxHungerHours(96).icon("🕳️").pathName("Ám Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Ám Đạo Ngũ Chuyển: Hố đen bóng tối nuốt chửng cả ánh mặt trời lẫn chiêu thức đối phương.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VAN_HON_PHAN_THIEN_CO").name("Vạn Hồn Phiên Thiên Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(26).apCost(2).baseDamage(270).baseDefense(75).baseHeal(45)
+                .bonusAtk(88).bonusDef(42).bonusHp(170)
+                .foodType("Vạn Hồn Tinh Phách").maxHungerHours(96).icon("🚩").pathName("Hồn Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Hồn Đạo Ngũ Chuyển: Vạn hồn phiên phất lên làm bầu trời u tối, quỷ khóc thần sầu.").build());
+
+        list.add(GuDefinition.builder()
+                .code("COT_LONG_THIEN_GIAP_CO").name("Cốt Long Thiên Giáp Cổ").rank(5).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(22).apCost(2).baseDamage(110).baseDefense(250).baseHeal(0)
+                .bonusAtk(45).bonusDef(105).bonusHp(240)
+                .foodType("Xương Rồng Thái Cổ").maxHungerHours(96).icon("🐉").pathName("Cốt Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Cốt Đạo Ngũ Chuyển: Bộ giáp xương rồng thái cổ bao bọc toàn thân, phòng ngự tuyệt đối.").build());
+
+        list.add(GuDefinition.builder()
+                .code("LONG_HUYET_DOAN_THE_CO").name("Long Huyết Đoán Thể Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(75).bonusDef(55).bonusHp(200)
+                .foodType("Máu Chân Long").maxHungerHours(999).icon("🐉").pathName("Huyết Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Thể Phách: Tắm máu Chân Long rèn đúc cơ thể rồi tiêu biến, vĩnh viễn tăng +75 ATK, +55 DEF, +200 HP và +35 Đạo Ngân Lực Đạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYET_MA_TIEN_CO").name("Huyết Ma Tiên Cổ").rank(6).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(15).apCost(2).baseDamage(410).baseDefense(140).baseHeal(140)
+                .bonusAtk(155).bonusDef(85).bonusHp(360)
+                .foodType("Huyết Hải Bản Nguyên").maxHungerHours(240).icon("🩸").pathName("Huyết Đạo").slotCategory("CONG_KICH")
+                .description("Tiên Cổ Huyết Đạo Sáng Tạo: Biển máu không khô, Huyết Ma bất tử!").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_U_MA_AM_CO").name("Cửu U Ma Âm Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(12).apCost(1).baseDamage(76).baseDefense(0).baseHeal(0)
+                .bonusAtk(25).bonusHp(25)
+                .foodType("Dây Đàn Cổ").maxHungerHours(48).icon("🎶").pathName("Âm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Âm Đạo: Tiếng ma âm chói tai xuyên thẳng qua màng nhĩ làm chấn động não bộ kẻ địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHA_HON_CHUONG_CO").name("Phá Hồn Chuông Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(16).apCost(1).baseDamage(114).baseDefense(35).baseHeal(0)
+                .bonusAtk(36).bonusDef(20).bonusHp(55)
+                .foodType("Đồng Thanh Ngàn Năm").maxHungerHours(60).icon("🔔").pathName("Âm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Âm Đạo: Tiếng chuông ngân vang tạo sóng xung kích vừa công kích vừa bảo vệ thân chủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THIEN_MA_CAM_CO").name("Thiên Ma Cầm Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(20).apCost(2).baseDamage(180).baseDefense(45).baseHeal(30)
+                .bonusAtk(60).bonusDef(25).bonusHp(90)
+                .foodType("Gỗ Ngô Đồng Sét Đánh").maxHungerHours(72).icon("🪕").pathName("Âm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Âm Đạo Tứ Chuyển: Gảy khúc Thiên Ma Thập Bát Phách, sóng âm hóa thành lưỡi đao vô hình trảm địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("LOI_PHAT_THIEN_NHAN_CO").name("Lôi Phạt Thiên Nhãn Cổ").rank(3).type(GuType.TRINH_SAT)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(1).baseDamage(95).baseDefense(20).baseHeal(0)
+                .bonusAtk(34).bonusDef(15).bonusHp(45)
+                .foodType("Lôi Tinh Nhãn").maxHungerHours(60).icon("👁️").pathName("Lôi Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Lôi Đạo: Con mắt thứ ba trên trán phóng ra tia sét trừng phạt và nhìn thấu mọi điểm yếu.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHONG_LOI_SONG_DUC_CO").name("Phong Lôi Song Dực Cổ").rank(4).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(18).apCost(1).baseDamage(110).baseDefense(60).baseHeal(0)
+                .bonusAtk(42).bonusDef(32).bonusHp(95)
+                .foodType("Lông Vũ Phong Lôi").maxHungerHours(72).icon("🦅").pathName("Lôi Đạo").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Phong Lôi: Một cánh gió, một cánh sét giúp tốc độ thân pháp của Cổ sư nhanh như tia chớp.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TU_TIEU_THAN_LOI_CO").name("Tử Tiêu Thần Lôi Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(26).apCost(2).baseDamage(288).baseDefense(60).baseHeal(0)
+                .bonusAtk(98).bonusDef(35).bonusHp(140)
+                .foodType("Tử Tiêu Lôi Dịch").maxHungerHours(96).icon("⚡").pathName("Lôi Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Lôi Đạo Ngũ Chuyển: Thần lôi tối thượng của chín tầng trời, một tia giáng xuống vạn tà hôi phi yên diệt.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHUONG_HOANG_CHAN_HOA_CO").name("Phượng Hoàng Chân Hỏa Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(22).apCost(2).baseDamage(184).baseDefense(40).baseHeal(55)
+                .bonusAtk(62).bonusDef(22).bonusHp(110)
+                .foodType("Lông Phượng Hoàng Lửa").maxHungerHours(72).icon("🔥").pathName("Viêm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Viêm Đạo: Ngọn lửa bất diệt của Phượng Hoàng, vừa thiêu rụi kẻ thù vừa hồi phục sinh mệnh.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAI_DUONG_KIM_O_CO").name("Thái Dương Kim Ô Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(26).apCost(2).baseDamage(285).baseDefense(70).baseHeal(0)
+                .bonusAtk(96).bonusDef(40).bonusHp(155)
+                .foodType("Tinh Hoa Mặt Trời").maxHungerHours(96).icon("☀️").pathName("Viêm Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Viêm Đạo Ngũ Chuyển: Hóa thân thành Kim Ô ba chân mang theo mặt trời rực cháy thiêu cạn biển cả.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHUONG_HOANG_NIET_BAN_CO").name("Phượng Hoàng Niết Bàn Cổ").rank(5).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(500)
+                .consumable(true).bonusAtk(90).bonusDef(70).bonusHp(260)
+                .foodType("Máu Phượng Hoàng").maxHungerHours(999).icon("🐦‍🔥").pathName("Viêm Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Chí Bảo: Tắm lửa trùng sinh niết bàn rồi tiêu biến, hồi đầy 100% HP/SP và vĩnh viễn tăng +90 ATK, +70 DEF, +260 HP tối đa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYEN_MINH_HAN_THUY_CO").name("Huyền Minh Hàn Thủy Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(16).apCost(1).baseDamage(115).baseDefense(40).baseHeal(0)
+                .bonusAtk(36).bonusDef(22).bonusHp(55)
+                .foodType("Nước Sông Ngầm Cực Bắc").maxHungerHours(60).icon("💧").pathName("Thủy Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Thủy Đạo: Một giọt nước nặng ngàn cân và lạnh thấu xương, xuyên thủng hộ giáp kẻ địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BANG_LONG_HO_THE_CO").name("Băng Long Hộ Thể Cổ").rank(4).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(18).apCost(1).baseDamage(55).baseDefense(170).baseHeal(30)
+                .bonusAtk(25).bonusDef(70).bonusHp(145)
+                .foodType("Vảy Rồng Băng").maxHungerHours(72).icon("🧊").pathName("Băng Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Băng Đạo: Hàn băng ngưng tụ thành hình rồng uốn lượn quanh người, đóng băng mọi đòn tấn công cận chiến.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TUYET_NU_HAN_TAM_CO").name("Tuyết Nữ Hàn Tâm Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(24).apCost(2).baseDamage(265).baseDefense(95).baseHeal(40)
+                .bonusAtk(86).bonusDef(52).bonusHp(175)
+                .foodType("Trái Tim Tuyết Vĩnh Cửu").maxHungerHours(96).icon("❄️").pathName("Băng Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Băng Đạo Ngũ Chuyển: Tuyết rơi vạn dặm, đóng băng cả Chân Nguyên và suy nghĩ của đối thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HAC_PHONG_QUY_TRAO_CO").name("Hắc Phong Quỷ Trảo Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(12).apCost(1).baseDamage(75).baseDefense(15).baseHeal(0)
+                .bonusAtk(25).bonusDef(10).bonusHp(30)
+                .foodType("Gió Đen Hẻm Núi").maxHungerHours(48).icon("🌪️").pathName("Phong Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Phong Đạo: Luồng gió đen ngưng tụ thành móng vuốt sắc lẹm xé rách không khí.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_THIEN_THAN_PHONG_CO").name("Cửu Thiên Thần Phong Cổ").rank(4).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(18).apCost(1).baseDamage(95).baseDefense(75).baseHeal(0)
+                .bonusAtk(38).bonusDef(38).bonusHp(100)
+                .foodType("Phong Tinh Chín Tầng Trời").maxHungerHours(72).icon("🌬️").pathName("Phong Đạo").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Phong Đạo Tứ Chuyển: Cưỡi gió chín tầng mây, tự do chuyển đổi cự ly và tăng mạnh né tránh.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHONG_THAN_NO_HAO_CO").name("Phong Thần Nộ Hào Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(268).baseDefense(70).baseHeal(0)
+                .bonusAtk(88).bonusDef(40).bonusHp(150)
+                .foodType("Phong Thần Tinh Hạch").maxHungerHours(96).icon("🌪️").pathName("Phong Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Phong Đạo Ngũ Chuyển: Tiếng gầm của Phong Thần cuốn bay cả núi đồi.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VAN_DOC_THU_SINH_CO").name("Vạn Độc Thư Sinh Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(16).apCost(1).baseDamage(118).baseDefense(20).baseHeal(0)
+                .bonusAtk(38).bonusDef(15).bonusHp(50)
+                .foodType("Ngũ Độc Thảo").maxHungerHours(60).icon("🧪").pathName("Độc Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Độc Đạo: Khí độc vô sắc vô vị phát tán theo gió, ăn mòn hộ thể chân nguyên của địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THIEN_DOC_HUYET_MANG_CO").name("Thiên Độc Huyết Mãng Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(2).baseDamage(182).baseDefense(35).baseHeal(0)
+                .bonusAtk(60).bonusDef(22).bonusHp(85)
+                .foodType("Nọc Độc Mãng Xà Vương").maxHungerHours(72).icon("🐍").pathName("Độc Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Độc Đạo Tứ Chuyển: Phóng ra cự mãng độc huyết cắn nuốt mục tiêu.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VAN_KIEP_DOC_TON_CO").name("Vạn Kiếp Độc Tôn Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(276).baseDefense(80).baseHeal(0)
+                .bonusAtk(92).bonusDef(45).bonusHp(165)
+                .foodType("Vạn Độc Bản Nguyên").maxHungerHours(96).icon("☠️").pathName("Độc Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Độc Đạo Ngũ Chuyển: Độc khí lan ra mười dặm không một ngọn cỏ sống sót.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KIM_CUONG_NO_VIEN_CO").name("Kim Cương Nộ Viên Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(12).apCost(1).baseDamage(80).baseDefense(25).baseHeal(0)
+                .bonusAtk(28).bonusDef(15).bonusHp(50)
+                .foodType("Máu Vượn Đột Biến").maxHungerHours(48).icon("🦍").pathName("Lực Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Lực Đạo: Bộc phát sức mạnh của Kim Cương Nộ Viên đấm nát đá tảng.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CU_LINH_THAN_CHUY_CO").name("Cự Linh Thần Chùy Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(16).apCost(1).baseDamage(125).baseDefense(30).baseHeal(0)
+                .bonusAtk(42).bonusDef(18).bonusHp(70)
+                .foodType("Quặng Thiên Thiết").maxHungerHours(60).icon("🔨").pathName("Lực Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Lực Đạo: Ngưng tụ đôi búa khổng lồ bằng chân nguyên nện thẳng xuống đầu đối phương.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BA_VUONG_DINH_LUC_CO").name("Bá Vương Đỉnh Lực Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(85).bonusDef(45).bonusHp(180)
+                .foodType("Đỉnh Đồng Cổ").maxHungerHours(999).icon("🏋️").pathName("Lực Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Lực Đạo: Hấp thụ sức mạnh Bá Vương nâng đỉnh rồi tiêu biến, vĩnh viễn tăng +85 ATK, +45 DEF, +180 HP và +45 Đạo Ngân Lực Đạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAI_CO_CU_NHAN_CO").name("Thái Cổ Cự Nhân Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(25).apCost(2).baseDamage(290).baseDefense(110).baseHeal(0)
+                .bonusAtk(102).bonusDef(58).bonusHp(250)
+                .foodType("Trái Tim Cự Nhân").maxHungerHours(96).icon("🗿").pathName("Lực Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Lực Đạo Ngũ Chuyển: Pháp tướng Thái Cổ Cự Nhân cao trăm trượng, một quyền rung chuyển đất trời.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BAN_CO_KHAI_THIEN_CO").name("Bàn Cổ Khai Thiên Cổ").rank(6).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(15).apCost(2).baseDamage(450).baseDefense(180).baseHeal(100)
+                .bonusAtk(180).bonusDef(100).bonusHp(450)
+                .foodType("Hỗn Độn Tinh Thạch").maxHungerHours(240).icon("🪓").pathName("Lực Đạo").slotCategory("CONG_KICH")
+                .description("Tiên Cổ Lực Đạo Sáng Tạo: Sức mạnh khai thiên辟 địa tối thượng!").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_VY_THIEN_HO_BIEN_CO").name("Cửu Vỹ Thiên Hồ Biến Cổ").rank(3).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(16).apCost(1).baseDamage(90).baseDefense(45).baseHeal(45)
+                .bonusAtk(32).bonusDef(25).bonusHp(80)
+                .foodType("Tinh Huyết Hồ Ly").maxHungerHours(60).icon("🦊").pathName("Biến Hóa").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Biến Hóa Đạo: Hóa thân thành Cửu Vỹ Thiên Hồ nhanh nhẹn và quyến rũ, vừa né đòn vừa phản kích.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KIM_SI_DAI_BANG_BIEN_CO").name("Kim Sí Đại Bằng Biến Cổ").rank(4).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(20).apCost(1).baseDamage(145).baseDefense(65).baseHeal(0)
+                .bonusAtk(52).bonusDef(35).bonusHp(110)
+                .foodType("Lông Vàng Đại Bằng").maxHungerHours(72).icon("🦅").pathName("Biến Hóa").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Biến Hóa Đạo Tứ Chuyển: Hóa cánh Kim Sí Đại Bằng vỗ cánh chín vạn dặm, tốc độ và sát thương đều đạt cực hạn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BACH_HO_SAT_THAN_BIEN_CO").name("Bạch Hổ Sát Thần Biến Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(20).apCost(2).baseDamage(188).baseDefense(55).baseHeal(0)
+                .bonusAtk(65).bonusDef(30).bonusHp(120)
+                .foodType("Nanh Bạch Hổ Vương").maxHungerHours(72).icon("🐅").pathName("Biến Hóa").slotCategory("CONG_KICH")
+                .description("Sáng tạo Biến Hóa Đạo Tứ Chuyển: Hóa thân thành Bạch Hổ Canh Kim chúa tể sát phạt.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HUYEN_VU_BAT_DIET_BIEN_CO").name("Huyền Vũ Bất Diệt Biến Cổ").rank(4).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(20).apCost(1).baseDamage(50).baseDefense(195).baseHeal(50)
+                .bonusAtk(20).bonusDef(88).bonusHp(220)
+                .foodType("Mai Rùa Huyền Vũ").maxHungerHours(72).icon("🐢").pathName("Biến Hóa").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Biến Hóa Đạo Tứ Chuyển: Mai Huyền Vũ trấn thủ, đao kiếm難 thương, vạn pháp bất xâm.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THANH_LONG_THIEN_UY_BIEN_CO").name("Thanh Long Thiên Uy Biến Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(25).apCost(2).baseDamage(282).baseDefense(105).baseHeal(80)
+                .bonusAtk(95).bonusDef(55).bonusHp(230)
+                .foodType("Long Châu Thanh Long").maxHungerHours(96).icon("🐉").pathName("Biến Hóa").slotCategory("CONG_KICH")
+                .description("Sáng tạo Biến Hóa Đạo Ngũ Chuyển: Hóa thân thành thần thú Thanh Long hô mưa gọi gió.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CHU_TUOC_BAT_TU_BIEN_CO").name("Chu Tước Bất Tử Biến Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(275).baseDefense(80).baseHeal(120)
+                .bonusAtk(90).bonusDef(45).bonusHp(210)
+                .foodType("Hỏa Tinh Chu Tước").maxHungerHours(96).icon("🦅").pathName("Biến Hóa").slotCategory("CONG_KICH")
+                .description("Sáng tạo Biến Hóa Đạo Ngũ Chuyển: Hóa thân thành thần điểu Chu Tước rực lửa bất tử.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KY_LAN_THOAI_THU_BIEN_CO").name("Kỳ Lân Thoại Thú Biến Cổ").rank(5).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(22).apCost(2).baseDamage(210).baseDefense(130).baseHeal(130)
+                .bonusAtk(75).bonusDef(70).bonusHp(240)
+                .foodType("Sừng Kỳ Lân").maxHungerHours(96).icon("🦄").pathName("Biến Hóa").slotCategory("PHU_TRO")
+                .description("Sáng tạo Biến Hóa Đạo Ngũ Chuyển: Tường thụy Kỳ Lân xuất thế, công thủ toàn năng và mang lại đại vận.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAI_CO_THAN_TUY_CO").name("Thái Cổ Thần Tủy Cổ").rank(5).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(120).bonusDef(90).bonusHp(300)
+                .foodType("Thần Tủy Thái Cổ").maxHungerHours(999).icon("🧬").pathName("Biến Hóa").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Tối Thượng: Thay máu đổi tủy thành huyết mạch Thái Cổ Thần Thú rồi biến mất, vĩnh viễn tăng +120 ATK, +90 DEF, +300 HP và +60 Đạo Ngân Lực Đạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CON_BANG_THON_THIEN_CO").name("Côn Bằng Thôn Thiên Cổ").rank(6).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(2).baseDamage(390).baseDefense(160).baseHeal(100)
+                .bonusAtk(150).bonusDef(95).bonusHp(380)
+                .foodType("Bản Nguyên Bắc Minh").maxHungerHours(240).icon("🐋").pathName("Biến Hóa").slotCategory("THAN_PHAP")
+                .description("Tiên Cổ Biến Hóa Sáng Tạo: Cá Côn dưới biển Bắc Minh hóa chim Bằng giang cánh che kín bầu trời.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CAM_LY_HONG_VAN_CO").name("Cẩm Lý Hồng Vận Cổ").rank(2).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(10).apCost(1).baseDamage(0).baseDefense(35).baseHeal(35)
+                .bonusAtk(15).bonusDef(20).bonusHp(60)
+                .foodType("Hạt Sen Vàng").maxHungerHours(48).icon("🐟").pathName("Vận Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Vận Đạo: Cá chép cẩm lý bơi lội trong Không Khiếu, mang lại may mắn và hộ mệnh cho chủ nhân.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TU_KHI_DONG_LAI_CO").name("Tử Khí Đông Lai Cổ").rank(3).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(14).apCost(1).baseDamage(50).baseDefense(50).baseHeal(50)
+                .bonusAtk(28).bonusDef(28).bonusHp(85)
+                .foodType("Sương Tím Buổi Sớm").maxHungerHours(60).icon("🟣").pathName("Vận Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Vận Đạo: Tử khí từ phương đông kéo tới, gia tăng toàn diện uy lực chiến đấu và vận khí.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THIEN_MENH_CHI_TU_CO").name("Thiên Mệnh Chi Tử Cổ").rank(4).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(18).apCost(1).baseDamage(130).baseDefense(80).baseHeal(80)
+                .bonusAtk(50).bonusDef(45).bonusHp(150)
+                .foodType("Long Khí Hoàng Triều").maxHungerHours(72).icon("👑").pathName("Vận Đạo").slotCategory("DAC_BIET")
+                .description("Sáng tạo Vận Đạo Tứ Chuyển: Khí vận như con cưng của trời đất, gặp dữ hóa lành, xuất chiêu tất bạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGHICH_THIEN_CAI_MENH_CO").name("Nghịch Thiên Cải Mệnh Cổ").rank(5).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(22).apCost(2).baseDamage(240).baseDefense(120).baseHeal(120)
+                .bonusAtk(85).bonusDef(65).bonusHp(220)
+                .foodType("Thiên Đạo Mảnh Vỡ").maxHungerHours(96).icon("☯️").pathName("Vận Đạo").slotCategory("DAC_BIET")
+                .description("Sáng tạo Vận Đạo Ngũ Chuyển: Mệnh ta do ta không do trời! Bẻ gãy xiềng xích số mệnh.").build());
+
+        list.add(GuDefinition.builder()
+                .code("DIỆU_THU_KHONG_KHONG_CO").name("Diệu Thủ Không Không Cổ").rank(2).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(12).apCost(1).baseDamage(68).baseDefense(20).baseHeal(0)
+                .bonusAtk(24).bonusDef(14).bonusHp(35)
+                .foodType("Găng Tay Lụa Đen").maxHungerHours(48).icon("🧤").pathName("Thâu Đạo").slotCategory("DAC_BIET")
+                .description("Sáng tạo Thâu Đạo: Bàn tay vô hình móc túi và đánh cắp một phần sức mạnh phòng ngự của đối phương.").build());
+
+        list.add(GuDefinition.builder()
+                .code("DAO_THIEN_THAN_THU_CO").name("Đạo Thiên Thần Thủ Cổ").rank(4).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(1).baseDamage(175).baseDefense(50).baseHeal(35)
+                .bonusAtk(58).bonusDef(30).bonusHp(95)
+                .foodType("Không Gian Chi Linh").maxHungerHours(72).icon("🖐️").pathName("Thâu Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Thâu Đạo Tứ Chuyển: Tuyệt kỹ truyền thừa Đạo Thiên Ma Tôn, cướp đoạt sinh lực và hộ giáp kẻ thù.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THAU_THIEN_HOAN_NHAT_CO").name("Thâu Thiên Hoán Nhật Cổ").rank(5).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(24).apCost(2).baseDamage(260).baseDefense(100).baseHeal(80)
+                .bonusAtk(88).bonusDef(55).bonusHp(180)
+                .foodType("Nhật Nguyệt Tinh Hoa").maxHungerHours(96).icon("🎭").pathName("Thâu Đạo").slotCategory("DAC_BIET")
+                .description("Sáng tạo Thâu Đạo Ngũ Chuyển: Đánh tráo cả mặt trời trên cao, biến sát thương nhận vào thành đòn phản kích.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CAM_PHAP_TUYET_LINH_CO").name("Cấm Pháp Tuyệt Linh Cổ").rank(3).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(16).apCost(1).baseDamage(88).baseDefense(45).baseHeal(0)
+                .bonusAtk(30).bonusDef(25).bonusHp(60)
+                .foodType("Đá Phá Pháp").maxHungerHours(60).icon("🚫").pathName("Luật Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Luật Đạo: Thiết lập vùng cấm pháp làm suy yếu khả năng vận chuyển Chân Nguyên của địch nhân.").build());
+
+        list.add(GuDefinition.builder()
+                .code("NGU_HANH_LUAN_CHUYEN_CO").name("Ngũ Hành Luân Chuyển Cổ").rank(4).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(18).apCost(1).baseDamage(70).baseDefense(170).baseHeal(50)
+                .bonusAtk(32).bonusDef(72).bonusHp(150)
+                .foodType("Ngũ Sắc Linh Thạch").maxHungerHours(72).icon("🎡").pathName("Luật Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Luật Đạo Tứ Chuyển: Kim Mộc Thủy Hỏa Thổ tương sinh tương khắc tạo thành vòng tròn phòng ngự bất khả xâm phạm.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VAN_PHAP_BAT_XAM_CO").name("Vạn Pháp Bất Xâm Cổ").rank(5).type(GuType.PHONG_NGU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(22).apCost(2).baseDamage(90).baseDefense(260).baseHeal(80)
+                .bonusAtk(40).bonusDef(115).bonusHp(250)
+                .foodType("Pháp Tắc Tinh Thạch").maxHungerHours(96).icon("🛡️").pathName("Luật Đạo").slotCategory("PHONG_NGU")
+                .description("Sáng tạo Luật Đạo Ngũ Chuyển: Chư pháp lui tránh, miễn giảm phần lớn mọi sát thương nguyên tố và vật lý.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THIEN_DIA_PHAP_TAC_CO").name("Thiên Địa Pháp Tắc Cổ").rank(6).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(2).baseDamage(400).baseDefense(200).baseHeal(150)
+                .bonusAtk(150).bonusDef(120).bonusHp(380)
+                .foodType("Đại Đạo Bản Nguyên").maxHungerHours(240).icon("⚖️").pathName("Luật Đạo").slotCategory("DAC_BIET")
+                .description("Tiên Cổ Luật Đạo Sáng Tạo: Ngôn xuất pháp tùy, lời nói trở thành quy tắc của thiên địa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THOI_GIAN_NGUNG_DONG_CO").name("Thời Gian Ngưng Đọng Cổ").rank(4).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(2).baseDamage(165).baseDefense(75).baseHeal(0)
+                .bonusAtk(55).bonusDef(40).bonusHp(110)
+                .foodType("Cát Thời Gian").maxHungerHours(72).icon("⏱️").pathName("Thời Gian").slotCategory("DAC_BIET")
+                .description("Sáng tạo Trụ Đạo Tứ Chuyển: Làm đóng băng dòng chảy thời gian xung quanh mục tiêu trong khoảnh khắc để tung đòn chí mạng.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THOI_KHONG_DAO_LUU_CO").name("Thời Không Đảo Lưu Cổ").rank(5).type(GuType.TRI_LIEU)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(24).apCost(2).baseDamage(180).baseDefense(120).baseHeal(220)
+                .bonusAtk(65).bonusDef(65).bonusHp(220)
+                .foodType("Nước Sông Quang Âm").maxHungerHours(96).icon("⏳").pathName("Thời Gian").slotCategory("PHU_TRO")
+                .description("Sáng tạo Trụ Đạo Ngũ Chuyển: Quay ngược trạng thái cơ thể về thời điểm toàn thịnh vài nhịp thở trước.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TUE_NGUYET_NHU_DAO_CO").name("Tuế Nguyệt Như Đao Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(280).baseDefense(60).baseHeal(0)
+                .bonusAtk(95).bonusDef(35).bonusHp(140)
+                .foodType("Khí Tức Năm Tháng").maxHungerHours(96).icon("🗡️").pathName("Thời Gian").slotCategory("CONG_KICH")
+                .description("Sáng tạo Trụ Đạo Ngũ Chuyển: Năm tháng như đao chém già nua vạn vật, tước đoạt sinh cơ của đối thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HU_KHONG_TRAM_CO").name("Hư Không Trảm Cổ").rank(3).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(16).apCost(1).baseDamage(120).baseDefense(15).baseHeal(0)
+                .bonusAtk(40).bonusDef(12).bonusHp(45)
+                .foodType("Mảnh Vỡ Không Gian").maxHungerHours(60).icon("🌌").pathName("Không Gian").slotCategory("CONG_KICH")
+                .description("Sáng tạo Không Gian Đạo: Lưỡi đao cắt ngang vết nứt không gian, xuất hiện ngay sát cổ họng kẻ thù.").build());
+
+        list.add(GuDefinition.builder()
+                .code("PHA_GIOI_HU_KHONG_CO").name("Phá Giới Hư Không Cổ").rank(4).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(18).apCost(1).baseDamage(130).baseDefense(75).baseHeal(0)
+                .bonusAtk(45).bonusDef(38).bonusHp(110)
+                .foodType("Đá Xuyên Giới").maxHungerHours(72).icon("🌀").pathName("Không Gian").slotCategory("THAN_PHAP")
+                .description("Sáng tạo Không Gian Đạo Tứ Chuyển: Xé rách bức tường không gian để dịch chuyển tức thời và né đòn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("KHONG_GIAN_PHONG_TOA_CO").name("Không Gian Phong Tỏa Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(25).apCost(2).baseDamage(265).baseDefense(110).baseHeal(0)
+                .bonusAtk(88).bonusDef(58).bonusHp(180)
+                .foodType(" Tinh Thể Không Gian").maxHungerHours(96).icon("🧊").pathName("Không Gian").slotCategory("CONG_KICH")
+                .description("Sáng tạo Không Gian Đạo Ngũ Chuyển: Ép chặt vùng không gian quanh địch nhân thành chiếc lồng giam nghiền nát tất cả.").build());
+
+        list.add(GuDefinition.builder()
+                .code("BO_DE_NGO_DAO_CO").name("Bồ Đề Ngộ Đạo Cổ").rank(4).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(0)
+                .consumable(true).bonusAtk(60).bonusDef(60).bonusHp(160)
+                .foodType("Lá Bồ Đề Ngàn Năm").maxHungerHours(999).icon("🍃").pathName("Trí Đạo").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Trí Đạo: Ngộ đạo dưới gốc Bồ Đề rồi tiêu biến, vĩnh viễn tăng +60 ATK, +60 DEF và +160 HP tối đa.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THIEN_CO_TOAN_TAN_CO").name("Thiên Cơ Toán Tận Cổ").rank(4).type(GuType.TRINH_SAT)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(16).apCost(1).baseDamage(140).baseDefense(65).baseHeal(0)
+                .bonusAtk(48).bonusDef(35).bonusHp(105)
+                .foodType("Bàn Tính Ngọc").maxHungerHours(72).icon("🧮").pathName("Trí Đạo").slotCategory("PHU_TRO")
+                .description("Sáng tạo Trí Đạo Tứ Chuyển: Tính toán mọi bước đi của đối thủ trước 3 hiệp, biến mọi đòn đánh thành điểm yếu.").build());
+
+        list.add(GuDefinition.builder()
+                .code("VAN_NIEM_HOA_KIEM_CO").name("Vạn Niệm Hóa Kiếm Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(24).apCost(2).baseDamage(272).baseDefense(85).baseHeal(0)
+                .bonusAtk(90).bonusDef(48).bonusHp(165)
+                .foodType("Tinh Thần Thần Tinh").maxHungerHours(96).icon("🧠").pathName("Trí Đạo").slotCategory("CONG_KICH")
+                .description("Sáng tạo Trí Đạo Ngũ Chuyển: Muôn vàn ý niệm trong đầu hóa thành mưa kiếm tinh thần công kích trực tiếp vào não hải.").build());
+
+        list.add(GuDefinition.builder()
+                .code("AM_DUONG_DAO_NGHICH_CO").name("Âm Dương Đảo Nghịch Cổ").rank(4).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(20).apCost(2).baseDamage(160).baseDefense(110).baseHeal(60)
+                .bonusAtk(55).bonusDef(55).bonusHp(140)
+                .foodType("Đá Thái Cực").maxHungerHours(72).icon("☯️").pathName("Âm Dương").slotCategory("DAC_BIET")
+                .description("Sáng tạo Âm Dương Đạo: Xoay chuyển Thái Cực Đồ, biến sát thương thành trị liệu và hộ giáp thành công kích.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HON_DON_THAI_CUC_CO").name("Hỗn Độn Thái Cực Cổ").rank(5).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(26).apCost(2).baseDamage(285).baseDefense(130).baseHeal(80)
+                .bonusAtk(96).bonusDef(70).bonusHp(220)
+                .foodType("Hỗn Độn Nguyên Khí").maxHungerHours(96).icon("☯️").pathName("Âm Dương").slotCategory("CONG_KICH")
+                .description("Sáng tạo Âm Dương Đạo Ngũ Chuyển: Lưỡng nghi sinh tứ tượng, nghiền nát càn khôn.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HONG_MONG_TU_KHI_CO").name("Hồng Mông Tử Khí Cổ").rank(6).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(500)
+                .consumable(true).bonusAtk(180).bonusDef(150).bonusHp(500)
+                .foodType("Tử Khí Hồng Mông").maxHungerHours(999).icon("🌌").pathName("Đặc Biệt").slotCategory("DAC_BIET")
+                .description("Tiên Cổ Tiêu Hao Sáng Tạo: Một tia Hồng Mông Tử Khí từ thuở khai thiên dung nhập bản thể rồi biến mất, vĩnh viễn tăng +180 ATK, +150 DEF, +500 HP và +10% kháng nguyên tố.").build());
+
+        list.add(GuDefinition.builder()
+                .code("CUU_CHUYEN_KIM_DAN_CO").name("Cửu Chuyển Kim Đan Cổ").rank(5).type(GuType.TIEU_THU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(0).apCost(1).baseDamage(0).baseDefense(0).baseHeal(300)
+                .consumable(true).bonusAtk(110).bonusDef(85).bonusHp(280)
+                .foodType("Thần Đan Cửu Chuyển").maxHungerHours(999).icon("🟡").pathName("Đặc Biệt").slotCategory("DAC_BIET")
+                .description("Cổ Tiêu Hao Chí Bảo: Kim đan chín chuyển lột xác phàm thai rồi tiêu biến, vĩnh viễn tăng +110 ATK, +85 DEF và +280 HP tối đa.").build());
+
+        // =========================================================================
+        // CỔ TRÙNG CHÂN TRUYỀN TỪ 4 ĐẠI TRUYỀN THỪA BÍ CẢNH (MA / TRÍ / THÂU / LỰC)
+        // =========================================================================
+        list.add(GuDefinition.builder()
+                .code("HUYET_TRI_CO").name("Huyết Trì Cổ").rank(3).type(GuType.TRI_LIEU)
+                .optimalDistance(CombatDistance.CAN_CHIEN).primevalCostPercent(12).apCost(1).baseDamage(35).baseDefense(45).baseHeal(160)
+                .bonusAtk(20).bonusDef(35).bonusHp(150)
+                .foodType("Máu Tươi Trăm Thú").maxHungerHours(60).icon("🩸").pathName("Huyết Đạo").slotCategory("PHU_TRO")
+                .description("Chân truyền Âm Cốt Huyết Trì (Tam Chuyển): Hóa ra ao máu ngâm mình hồi phục Không Khiếu và chữa thương cực nhanh, nhưng tích tụ ma khí.").build());
+
+        list.add(GuDefinition.builder()
+                .code("COT_XI_CO").name("Cốt Xỉ Cổ").rank(2).type(GuType.CONG_KICH)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(10).apCost(1).baseDamage(95).baseDefense(30).baseHeal(0)
+                .bonusAtk(28).bonusDef(18).bonusHp(45)
+                .foodType("Sữa Đá Trắng").maxHungerHours(48).icon("🦴").pathName("Cốt Đạo").slotCategory("CONG_KICH")
+                .description("Chân truyền Huyết Cốt Ma Quân (Nhị Chuyển): Phóng ra hàng loạt răng xương sắc bén cắn xé huyết nhục đối thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("THUC_NGON_CO").name("Thực Ngôn Cổ").rank(3).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(15).apCost(1).baseDamage(75).baseDefense(40).baseHeal(40)
+                .bonusAtk(25).bonusDef(25).bonusHp(60)
+                .foodType("Lưỡi Chim Yến").maxHungerHours(60).icon("👅").pathName("Tín Đạo").slotCategory("DAC_BIET")
+                .description("Kỳ Cổ Tín Đạo (Tam Chuyển): Nuốt trọn lời thề độc mà không chịu phản phệ, chuyên dùng phá giải cạm bẫy thề độc Chính Đạo.").build());
+
+        list.add(GuDefinition.builder()
+                .code("DA_TU_CO").name("Đa Tự Cổ").rank(3).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(10).apCost(1).baseDamage(85).baseDefense(45).baseHeal(55)
+                .bonusAtk(32).bonusDef(30).bonusHp(80)
+                .foodType("Nước Mực Trăm Năm").maxHungerHours(60).icon("📖").pathName("Trí Đạo").slotCategory("PHU_TRO")
+                .description("Chân truyền Mặc Sanh Tiên Sư (Tam Chuyển): Một niệm sinh vạn chữ, tăng tốc độ suy tính chiến thuật và áp chế tinh thần địch.").build());
+
+        list.add(GuDefinition.builder()
+                .code("GIAI_ME_CO").name("Giải Mê Cổ").rank(3).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(10).apCost(1).baseDamage(70).baseDefense(55).baseHeal(65)
+                .bonusAtk(28).bonusDef(35).bonusHp(90)
+                .foodType("Lá Trà Ngộ Đạo").maxHungerHours(60).icon("🧩").pathName("Trí Đạo").slotCategory("PHU_TRO")
+                .description("Chân truyền Vô Tự Sách Lâm (Tam Chuyển): Nhìn thấu mọi bí ẩn, cạm bẫy và tàn phương cổ đạo trong chớp mắt.").build());
+
+        list.add(GuDefinition.builder()
+                .code("TINH_NHAN_CO").name("Tinh Nhãn Cổ").rank(3).type(GuType.PHU_TRO)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(8).apCost(1).baseDamage(80).baseDefense(50).baseHeal(40)
+                .bonusAtk(35).bonusDef(30).bonusHp(75)
+                .foodType("Ánh Sao Đêm").maxHungerHours(60).icon("👁️").pathName("Trí Đạo").slotCategory("PHU_TRO")
+                .description("Bí truyền Vô Tự Sách Lâm (Tam Chuyển): Đôi mắt ánh sao nhìn thấu toàn bộ Cổ trùng ẩn giấu trong Không Khiếu của đối thủ.").build());
+
+        list.add(GuDefinition.builder()
+                .code("HAI_DAO_CO").name("Hái Đào Cổ").rank(2).type(GuType.DAC_BIET)
+                .optimalDistance(CombatDistance.TAM_TRUNG).primevalCostPercent(12).apCost(1).baseDamage(88).baseDefense(25).baseHeal(30)
+                .bonusAtk(30).bonusDef(20).bonusHp(55)
+                .foodType("Quả Đào Tiên").maxHungerHours(48).icon("🍑").pathName("Thâu Đạo").slotCategory("DAC_BIET")
+                .description("Chân truyền Hoàng Kim Đạo Tặc (Nhị Chuyển): Thò bàn tay vô hình cướp đoạt ngẫu nhiên Cổ trùng hoặc Nguyên Thạch từ tay địch trong giao chiến.").build());
+
+        list.add(GuDefinition.builder()
+                .code("AN_Y_CO").name("Ẩn Ý Cổ").rank(2).type(GuType.THAN_PHAP)
+                .optimalDistance(CombatDistance.TAM_XA).primevalCostPercent(9).apCost(1).baseDamage(50).baseDefense(65).baseHeal(25)
+                .bonusAtk(18).bonusDef(35).bonusHp(65)
+                .foodType("Sương Mù Đêm").maxHungerHours(48).icon("🌫️").pathName("Thâu Đạo").slotCategory("THAN_PHAP")
+                .description("Chân truyền Đạo Tặc Sư (Nhị Chuyển): Che giấu hoàn toàn sát ý và khí tức bản thân, tránh mọi sự dò xét của Trinh Sát Cổ.").build());
+
         return list;
     }
 
@@ -2019,7 +2950,142 @@ public class DataInitializer implements CommandLineRunner {
                         .primaryGuCode("HOANG_KIM_XA_LOI_CO").secondaryGuCode("BAT_SON_CO")
                         .materialName("Tử Tinh Thần Thạch").environmentCondition("Trên đỉnh núi cao")
                         .resultGuCode("TU_TINH_XA_LOI_CO")
-                        .stoneCost(300).successRate(50).backlashDamage(80).isUnlocked(true).build()
+                        .stoneCost(300).successRate(50).backlashDamage(80).isUnlocked(true).build(),
+
+                // ==================== 14. CỔ TIÊU HAO CƯỜNG HÓA & ĐỘT PHÁ TRẬN ĐẤU ====================
+                GuRecipe.builder()
+                        .recipeName("Song Trư Dịch Cốt: Hắc Bạch Thỉ Cổ")
+                        .primaryGuCode("HAC_THI_CO").secondaryGuCode("THANH_TRU_CO")
+                        .materialName("Âm Dương Thỉ Huyết").environmentCondition("Bình thường")
+                        .resultGuCode("HAC_BACH_THI_CO")
+                        .stoneCost(35).successRate(75).backlashDamage(20).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Kích Hoạt Tế Bào: Hổ Lực Cổ")
+                        .primaryGuCode("MANH_HO_CO").secondaryGuCode("BACH_THI_CO")
+                        .materialName("Cốt Tủy Mãnh Hổ").environmentCondition("Bình thường")
+                        .resultGuCode("HO_LUC_CO")
+                        .stoneCost(40).successRate(75).backlashDamage(20).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Cự Tượng Bạt Sơn: Tượng Lực Cổ")
+                        .primaryGuCode("HO_LUC_CO").secondaryGuCode("HUNG_LUC_CO")
+                        .materialName("Ngà Voi Cổ Đại").environmentCondition("Đã tích đủ Đạo Ngân")
+                        .resultGuCode("TUONG_LUC_CO")
+                        .stoneCost(60).successRate(70).backlashDamage(30).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Luyện Hóa Da Thịt: Long Lân Cổ")
+                        .primaryGuCode("THIET_CAN_CO").secondaryGuCode("NGU_LAN_CO")
+                        .materialName("Vảy Rồng Thượng Cổ").environmentCondition("Trong hầm lửa")
+                        .resultGuCode("LONG_LAN_CO")
+                        .stoneCost(95).successRate(60).backlashDamage(40).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Ma Đạo Bạo Khí: Huyết Khí Bạo Phát Cổ")
+                        .primaryGuCode("HUYET_KHI_CO").secondaryGuCode("TU_TRUNG")
+                        .materialName("Máu Tươi Tâm Đầu").environmentCondition("Ban đêm")
+                        .resultGuCode("HUYET_KHI_BAO_PHAT_CO")
+                        .stoneCost(40).successRate(75).backlashDamage(25).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Bất Hoại Hộ Thân: Kim Cương Bất Hoại Cổ")
+                        .primaryGuCode("CUONG_THIET_THUAN_CO").secondaryGuCode("BACH_NGOC_CO")
+                        .materialName("Kim Cương Tinh Phấn").environmentCondition("Đền cổ trang nghiêm")
+                        .resultGuCode("KIM_CUONG_BAT_HOAI_CO")
+                        .stoneCost(55).successRate(70).backlashDamage(25).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Dịch Chuyển Tuyệt Đối: Thần Hành Phù Cổ")
+                        .primaryGuCode("THANH_PHONG_LUAN_CO").secondaryGuCode("DANG_KHONG_CO")
+                        .materialName("Chu Sa Phù Lục").environmentCondition("Đêm giông bão")
+                        .resultGuCode("THAN_HANH_PHU_CO")
+                        .stoneCost(40).successRate(75).backlashDamage(20).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Suy Diễn Sát Chiêu: Tụ Tinh Cổ")
+                        .primaryGuCode("LINH_QUANG_CO").secondaryGuCode("TU_KY_CO")
+                        .materialName("Tinh Thần Ngọc Lộ").environmentCondition("Sáng sớm tinh mơ")
+                        .resultGuCode("TU_TINH_CO")
+                        .stoneCost(55).successRate(70).backlashDamage(25).isUnlocked(true).build(),
+
+                // ==================== 15. BÍ PHƯƠNG TỬU ĐẠO & CỔ TRÙNG SÁNG TẠO ====================
+                GuRecipe.builder()
+                        .recipeName("Thất Hương Mỹ Tửu: Thất Hương Tửu Trùng (Tứ Chuyển)")
+                        .primaryGuCode("TU_VI_TUU_TRUNG").secondaryGuCode("TU_TRUNG")
+                        .materialName("Thất Hương Bách Hoa Tửu").environmentCondition("Hầm ủ rượu thơm")
+                        .resultGuCode("THAT_HUONG_TUU_TRUNG")
+                        .stoneCost(95).successRate(65).backlashDamage(35).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Truyền Thừa Hoa Tửu: Cửu Chuyển Tiên Tửu Trùng (Ngũ Chuyển)")
+                        .primaryGuCode("THAT_HUONG_TUU_TRUNG").secondaryGuCode("TU_VI_TUU_TRUNG")
+                        .materialName("Tiên Nhưỡng Ngàn Năm").environmentCondition("Hầm ủ rượu thơm")
+                        .resultGuCode("CUU_CHUYEN_TIEN_TUU_TRUNG")
+                        .stoneCost(180).successRate(55).backlashDamage(50).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Tửu Nguyệt Giao Hòa: Túy Tiên Nguyệt Cổ (Tam Chuyển)")
+                        .primaryGuCode("NGUYET_MANG_CO").secondaryGuCode("TU_TRUNG")
+                        .materialName("Rượu Hoa Quế").environmentCondition("Đêm trăng tròn")
+                        .resultGuCode("TUY_TIEN_NGUYET_CO")
+                        .stoneCost(50).successRate(72).backlashDamage(25).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Kiếm Đạo Khởi Nguyên: Lôi Minh Kiếm Dực Cổ (Tam Chuyển)")
+                        .primaryGuCode("THANH_LIEN_KIEM_KHI_CO").secondaryGuCode("THIEM_DIEN_CO")
+                        .materialName("Lôi Thiết Vũ").environmentCondition("Đêm sấm sét")
+                        .resultGuCode("LOI_MINH_KIEM_DUC_CO")
+                        .stoneCost(55).successRate(70).backlashDamage(25).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Kiếm Trận Tinh Hà: Tinh Hà Kiếm Trận Cổ (Tứ Chuyển)")
+                        .primaryGuCode("LOI_MINH_KIEM_DUC_CO").secondaryGuCode("TINH_QUANG_TIEN_CO")
+                        .materialName("Tinh Thiết Thiên Ngoại").environmentCondition("Ban đêm")
+                        .resultGuCode("TINH_HA_KIEM_TRAN_CO")
+                        .stoneCost(90).successRate(62).backlashDamage(40).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Kiếm Đạo Chí Tôn: Vạn Kiếm Quy Tông Cổ (Ngũ Chuyển)")
+                        .primaryGuCode("TINH_HA_KIEM_TRAN_CO").secondaryGuCode("KIEM_THUAN_HO_THE_CO")
+                        .materialName("Kiếm Hồn Ngàn Năm").environmentCondition("Trên đỉnh núi cao")
+                        .resultGuCode("VAN_KIEM_QUY_TONG_CO")
+                        .stoneCost(160).successRate(55).backlashDamage(55).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Mộng Đạo Huyền Cơ: Đại Mộng Thiên Thu Cổ (Ngũ Chuyển)")
+                        .primaryGuCode("VINH_DA_AC_MONG_CO").secondaryGuCode("THIEN_MA_HUYEN_CANH_CO")
+                        .materialName("Thiên Thu Mộng Lộ").environmentCondition("Ban đêm")
+                        .resultGuCode("DAI_MONG_THIEN_THU_CO")
+                        .stoneCost(165).successRate(55).backlashDamage(55).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Tinh Đạo Đế Vương: Tử Vi Đế Tinh Cổ (Ngũ Chuyển)")
+                        .primaryGuCode("BAC_DAU_TINH_TRAN_CO").secondaryGuCode("TINH_THAN_DAN_THACH_CO")
+                        .materialName("Đế Tinh Tử Ngọc").environmentCondition("Ban đêm")
+                        .resultGuCode("TU_VI_DE_TINH_CO")
+                        .stoneCost(165).successRate(55).backlashDamage(55).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Long Huyết Đoán Thể Cổ (Tứ Chuyển Tiêu Hao)")
+                        .primaryGuCode("TUONG_LUC_CO").secondaryGuCode("LONG_LAN_CO")
+                        .materialName("Máu Chân Long").environmentCondition("Trong hầm lửa")
+                        .resultGuCode("LONG_HUYET_DOAN_THE_CO")
+                        .stoneCost(110).successRate(65).backlashDamage(40).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Phượng Hoàng Niết Bàn Cổ (Ngũ Chuyển Tiêu Hao)")
+                        .primaryGuCode("PHUONG_HOANG_CHAN_HOA_CO").secondaryGuCode("HOI_XUAN_CO")
+                        .materialName("Máu Phượng Hoàng").environmentCondition("Trong hầm lửa")
+                        .resultGuCode("PHUONG_HOANG_NIET_BAN_CO")
+                        .stoneCost(175).successRate(58).backlashDamage(50).isUnlocked(true).build(),
+
+                GuRecipe.builder()
+                        .recipeName("Bí Phương Vô Tự Sách Lâm: Tinh Nhãn Cổ (Tam Chuyển)")
+                        .primaryGuCode("DA_TU_CO").secondaryGuCode("GIAI_ME_CO")
+                        .materialName("Ngọc Thạch Phấn").environmentCondition("Ban đêm")
+                        .resultGuCode("TINH_NHAN_CO")
+                        .stoneCost(45).successRate(78).backlashDamage(20).isUnlocked(true).build()
         );
 
         for (GuRecipe recipe : recipes) {

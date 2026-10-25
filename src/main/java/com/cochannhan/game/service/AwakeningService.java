@@ -32,27 +32,49 @@ public class AwakeningService {
         Aptitude aptitude;
         int percentage;
         int starterStones;
+        int starterTalentPoints = 2;
+        String extremePhysiqueTitle = "";
+
+        String[] tenExtremePhysiques = {
+            "Cổ Nguyệt Âm Hoang Thể",
+            "Bắc Minh Băng Phách Thể",
+            "Đại Lực Chân Vũ Thể",
+            "Thái Nhật Dương Mãng Thể",
+            "Vạn Thọ Vô Cương Thể",
+            "Tuyệt Không Cương Trụ Thể",
+            "Hỗn Nguyên Nhất Khí Thể",
+            "Vũ Trụ Tinh Thần Thể",
+            "Tiêu Dao Trí Tâm Thể",
+            "Đại Đạo Vô Tình Thể"
+        };
 
         if ("PHUONG_NGUYEN_REBIRTH".equalsIgnoreCase(request.getCustomScenario())) {
             aptitude = Aptitude.BINH_DANG;
             percentage = 44; // Cổ Nguyệt Phương Nguyên 44%
             starterStones = 30; // Phương Nguyên trùng sinh có vốn tích lũy ban đầu
         } else {
-            // Random gacha rolling distribution: 5% Giáp, 20% Ất, 50% Bính, 25% Đinh
+            // Random gacha rolling distribution: 1% Thập Tuyệt Thể (100%), 9% Giáp (80-99%), 25% Ất (60-79%), 45% Bính (40-59%), 20% Đinh (20-39%)
             int roll = random.nextInt(100);
-            if (roll < 5) {
+            if (roll < 1) { // 1% Cơ duyên nghịch thiên
+                aptitude = Aptitude.THAP_TUYET_THE;
+                percentage = 100; // 100% Thập Tuyệt Thể!
+                starterStones = 100;
+                starterTalentPoints = 4;
+                extremePhysiqueTitle = " [" + tenExtremePhysiques[random.nextInt(tenExtremePhysiques.length)] + "]";
+            } else if (roll < 10) { // 9% Giáp Đẳng
                 aptitude = Aptitude.GIAP_DANG;
                 percentage = 80 + random.nextInt(20); // 80 - 99%
                 starterStones = 60;
-            } else if (roll < 25) {
+                starterTalentPoints = 3;
+            } else if (roll < 35) { // 25% Ất Đẳng
                 aptitude = Aptitude.AT_DANG;
                 percentage = 60 + random.nextInt(20); // 60 - 79%
                 starterStones = 40;
-            } else if (roll < 75) {
+            } else if (roll < 80) { // 45% Bính Đẳng
                 aptitude = Aptitude.BINH_DANG;
                 percentage = 40 + random.nextInt(20); // 40 - 59%
                 starterStones = 25;
-            } else {
+            } else { // 20% Đinh Đẳng
                 aptitude = Aptitude.DINH_DANG;
                 percentage = 20 + random.nextInt(20); // 20 - 39%
                 starterStones = 15;
@@ -83,7 +105,12 @@ public class AwakeningService {
                 .daoMarksLuc(0)
                 .daoMarksViem(0)
                 .daoMarksHuyet(0)
-                .springAutumnCicadaStress("PHUONG_NGUYEN_REBIRTH".equalsIgnoreCase(request.getCustomScenario()) ? 25 : 0)
+                .permanentBonusAtk(aptitude == Aptitude.THAP_TUYET_THE ? 30 : 0)
+                .permanentBonusDef(aptitude == Aptitude.THAP_TUYET_THE ? 20 : 0)
+                .elementalResistPercent(aptitude == Aptitude.THAP_TUYET_THE ? 15 : 0)
+                .talentPoints(starterTalentPoints)
+                .unlockedTalents("")
+                .springAutumnCicadaStress("PHUONG_NGUYEN_REBIRTH".equalsIgnoreCase(request.getCustomScenario()) ? 25 : (aptitude == Aptitude.THAP_TUYET_THE ? 15 : 0))
                 .rebirthCount("PHUONG_NGUYEN_REBIRTH".equalsIgnoreCase(request.getCustomScenario()) ? 1 : 0)
                 .build();
 
@@ -104,6 +131,22 @@ public class AwakeningService {
                 .isStarving(false)
                 .build();
         starterGus.add(characterGuRepository.save(nguyetQuangChar));
+
+        if (aptitude == Aptitude.THAP_TUYET_THE) {
+            final Long savedCharId = character.getId();
+            guDefinitionRepository.findByCode("TU_TRUNG").ifPresent(tuTrung -> {
+                CharacterGu tuTrungChar = CharacterGu.builder()
+                        .characterId(savedCharId)
+                        .guDefinition(tuTrung)
+                        .currentHungerHours(tuTrung.getMaxHungerHours())
+                        .isEquipped(true)
+                        .slotIndex(4)
+                        .isHibernating(false)
+                        .isStarving(false)
+                        .build();
+                starterGus.add(characterGuRepository.save(tuTrungChar));
+            });
+        }
 
         if ("PHUONG_NGUYEN_REBIRTH".equalsIgnoreCase(request.getCustomScenario())) {
             GuDefinition xuanThuThien = guDefinitionRepository.findByCode("XUAN_THU_THIEN")
@@ -130,8 +173,8 @@ public class AwakeningService {
                 .location("Học Đường Gia Tộc")
                 .clanSuspicion(10)
                 .marketEvent("Gia tộc phát trợ cấp sơ giai: Mỗi đệ tử nhận 3 viên Nguyên Thạch.")
-                .lastEventLog(String.format("Khai Khiếu Đại Điển hoàn tất! Đạt tư chất %s (%d%%). Không Khiếu mở ra biển Thanh Đồng Chân Nguyên sơ giai.",
-                        aptitude.getDisplayName(), percentage))
+                .lastEventLog(String.format("Khai Khiếu Đại Điển hoàn tất! Đạt tư chất %s%s (%d%%). Không Khiếu mở ra biển Thanh Đồng Chân Nguyên rực rỡ.",
+                        aptitude.getDisplayName(), extremePhysiqueTitle, percentage))
                 .build();
 
         gameState = gameStateRepository.save(gameState);
@@ -141,8 +184,8 @@ public class AwakeningService {
                 .gameState(gameState)
                 .equippedGus(starterGus.stream().filter(CharacterGu::isEquipped).toList())
                 .allGus(starterGus)
-                .announcement(String.format("Chúc mừng %s đã khai khiếu thành công! Tư chất: %s (%d%%).",
-                        character.getName(), aptitude.getDisplayName(), percentage))
+                .announcement(String.format("🌟 Chúc mừng %s đã khai khiếu thành công! Tư chất: %s%s (%d%%).",
+                        character.getName(), aptitude.getDisplayName(), extremePhysiqueTitle, percentage))
                 .build();
     }
 }

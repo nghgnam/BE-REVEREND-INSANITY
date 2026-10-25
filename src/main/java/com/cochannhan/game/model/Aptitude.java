@@ -1,6 +1,7 @@
 package com.cochannhan.game.model;
 
 public enum Aptitude {
+    THAP_TUYET_THE("Thập Tuyệt Thể (SS)", 100, 100, 80, "#EC4899", "Thiên địa dị chủng vạn năm có một! 10 thành Chân Nguyên viên mãn (100%), tốc độ tu luyện và hồi phục nghịch thiên!"),
     GIAP_DANG("Giáp Đẳng (A)", 80, 99, 50, "#F59E0B", "Gia tộc trọng vọng, tài nguyên dồi dào, hồi chân nguyên cực nhanh nhưng bị giám sát gắt gao."),
     AT_DANG("Ất Đẳng (B)", 60, 79, 35, "#3B82F6", "Tầng lớp rường cột trung lưu, lao dịch cống hiến cho sơn trại."),
     BINH_DANG("Bính Đẳng (C)", 40, 59, 25, "#10B981", "Bị gia tộc ghẻ lạnh, tài nguyên ít ỏi, bắt buộc phải mưu mô cướp đoạt để nghịch thiên cải mệnh."),
